@@ -17,6 +17,9 @@ void PWM_enableTimerClock(TIM_TypeDef* Timer){
 }
 
 
+
+
+
 /**
  * @brief Enables the counter for the specified timer and waits until the counter overflows.
  *
@@ -31,6 +34,10 @@ void PWM_enableCounter(TIM_TypeDef* Timer){
 	while (!(Timer->SR & (1<<0))); //wait until counter is overflow
 }
 
+
+
+
+
 /**
 	*@brief Init PWM module of STM32
 	*@param Timer: Pointer to the TIM_TypeDef structure representing the timer.
@@ -39,7 +46,7 @@ void PWM_enableCounter(TIM_TypeDef* Timer){
 void PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint16_t arrValue, uint16_t CCRxValue){
 	Timer_global = Timer;
 	PWM_enableTimerClock(Timer);
-	GPIO_EnableClock(GPIO_A);
+	//GPIO_EnableClock(GPIO_A);
 	
 	
 	switch(channel){
@@ -82,12 +89,16 @@ void PWM_ChannelMode_1(uint8_t channel){
 	else if (channel == PWM_Channel_4) Timer_global->CCMR2 |= (1 << 13) | (1 << 14);
 }
 
+
+
 void PWM_EnableCCOutput(uint8_t channel){
 	if(channel == PWM_Channel_1) Timer_global->CCER |= (1 << 0);
 	else if (channel == PWM_Channel_2) Timer_global->CCER |= (1 << 4);
 	else if (channel == PWM_Channel_3) Timer_global->CCER |= (1 << 8);
 	else if (channel == PWM_Channel_4) Timer_global->CCER |= (1 << 12);
 }
+
+
 
 void PWM_ChannelConfig(uint8_t channel){
 	//PWM Mode 1 for selected channel
@@ -98,9 +109,15 @@ void PWM_ChannelConfig(uint8_t channel){
 	
 }
 
+
+
+
 void PWM_EnableUpdateGeneration(){
 	Timer_global->EGR |= (1 << 0);
 }
+
+
+
 
 
 void PWM_Start(TIM_TypeDef* Timer){
@@ -108,19 +125,23 @@ void PWM_Start(TIM_TypeDef* Timer){
 	
 	PWM_enableCounter(Timer);
 	
-	//Enable GPIIO Alternative function
-	GPIOA->CRL |= (1 << 25) | (1 << 27);
-	GPIOA->CRL &= ~(1 << 26);
-	//Timer -> CNT = 0;  //set counter to 0
 }
+
+
+
 
 void PWM_SetPrescaler(uint16_t prescalerValue){
 	Timer_global->PSC = prescalerValue - 1;
 }
 
+
+
+
 void PWM_SetARRReg(uint16_t ARRValue){
 	Timer_global->ARR = ARRValue;
 }
+
+
 
 void PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel){
 	switch(channel){
