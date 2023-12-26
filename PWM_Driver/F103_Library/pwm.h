@@ -31,14 +31,15 @@ void PWM_ChannelConfig(uint8_t channel);
 void PWM_ChannelMode_1(uint8_t channel);
 void PWM_EnableCCOutput(uint8_t channel);
 void PWM_enableTimerClock(TIM_TypeDef* Timer);
+void PWM_EnableUpdateGeneration();
 
 
 /*-----------------User API---------------------*/
 void PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint16_t arrValue, uint16_t CCRxValue);
-void PWM_ConfigPrescaler(uint16_t value);
-void PWM_ConfigARRReg(uint16_t ARRValue);
-void PWM_ConfigCCRxReg(uint16_t CCRxvalue);
 void PWM_Start(TIM_TypeDef* Timer);
+void PWM_SetPrescaler(uint16_t prescalerValue);
+void PWM_SetARRReg(uint16_t ARRValue);
+void PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel);
 
 
 

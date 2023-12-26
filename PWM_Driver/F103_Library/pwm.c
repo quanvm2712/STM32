@@ -1,4 +1,5 @@
 #include "pwm.h"
+#include "gpio.h"
 
 TIM_TypeDef* Timer_global;
 
@@ -37,6 +38,9 @@ void PWM_enableCounter(TIM_TypeDef* Timer){
 	*/
 void PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint16_t arrValue, uint16_t CCRxValue){
 	Timer_global = Timer;
+	PWM_enableTimerClock(Timer);
+	GPIO_EnableClock(GPIO_A);
+	
 	
 	switch(channel){
 		case PWM_Channel_1:
@@ -64,9 +68,8 @@ void PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint16_t
 			break;
 	}
 	
-	PWM_enableTimerClock(Timer);
+
 	PWM_ChannelConfig(channel);
-	
 }
 
 
@@ -92,14 +95,49 @@ void PWM_ChannelConfig(uint8_t channel){
 	
 	//Enable capture/compare output
 	PWM_EnableCCOutput(channel);
+	
 }
 
-void PWM_EnableUpdateGeneration(TIM_TypeDef* Timer){
-	Timer->EGR |= (1 << 0);
+void PWM_EnableUpdateGeneration(){
+	Timer_global->EGR |= (1 << 0);
 }
 
 
 void PWM_Start(TIM_TypeDef* Timer){
+	PWM_EnableUpdateGeneration();
+	
 	PWM_enableCounter(Timer);
-	Timer -> CNT = 0;  //set counter to 0
+	
+	//Enable GPIIO Alternative function
+	GPIOA->CRL |= (1 << 25) | (1 << 27);
+	GPIOA->CRL &= ~(1 << 26);
+	//Timer -> CNT = 0;  //set counter to 0
+}
+
+void PWM_SetPrescaler(uint16_t prescalerValue){
+	Timer_global->PSC = prescalerValue - 1;
+}
+
+void PWM_SetARRReg(uint16_t ARRValue){
+	Timer_global->ARR = ARRValue;
+}
+
+void PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel){
+	switch(channel){
+		case PWM_Channel_1:
+			Timer_global->CCR1 = CCRxValue;
+			break;
+		
+		case PWM_Channel_2:
+			Timer_global->CCR2 = CCRxValue;
+			break;
+
+		case PWM_Channel_3:
+			Timer_global->CCR3 = CCRxValue;
+			break;
+
+		case PWM_Channel_4:
+			Timer_global->CCR4 = CCRxValue;
+			break;		
+	}
 }
