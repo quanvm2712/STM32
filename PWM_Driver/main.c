@@ -28,10 +28,7 @@ int main(void){
 		CCRxVal += 10;
 		if(CCRxVal > 100) CCRxVal = 0;
 		
-		delay_ms(200);
-
-
-		
+		delay_ms(200);	
 		
 	}
 	return 0;

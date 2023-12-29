@@ -2,6 +2,7 @@
 #define	GPIO_H
 
 #include "stm32f10x.h"
+#include "stdbool.h"
 
 //GPIO Port 
 #define AFIOEN		0
@@ -17,7 +18,9 @@
 #define GPIO_INPUT		1
 #define AFIO_OUTPUT		2
 
-
+//PULL UP/DOWN
+#define	GPIO_PULLUP		0
+#define GPIO_PULLDOWN	1
 
 
 
@@ -26,5 +29,6 @@ void GPIO_Init(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode);
 void GPIO_Set(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Reset(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Toggle(uint8_t GPIO_Port, uint8_t GPIO_Pin);
+void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode);
 
 #endif //GPIO_H

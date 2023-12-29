@@ -4,20 +4,20 @@ void TIM2_Config(void){
 	//enable timer2 clock
 	RCC->APB1ENR |= (1 << 0);
 	
-	TIM2->ARR = 0xffff - 1;  //auto-reload register (max value of CNT register)
+	TIM2->ARR = 0xffff - 1;  //auto-reload register
 	TIM2->PSC = 72 - 1;  //prescaler
 	
-	//enable timer
+	//enable counter
 	TIM2->CR1 |= (1<<0);
 	
-	while(!(TIM2->SR & (1<<0)));
+	while(!(TIM2->SR & (1<<0))); //wait for counter to overflow
 	
 }
 
 
 void delay_us(uint16_t time_us){
-	TIM2->CNT = 0;
-	while (TIM2->CNT < time_us);
+	TIM2->CNT = 0; //reset counter value
+	while (TIM2->CNT < time_us);  //wait until counter value exceed time_us
 }
 
 void delay_ms(uint16_t time_ms){

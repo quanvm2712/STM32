@@ -51,11 +51,17 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#define ENCODER_PPR	30  //Encoder	resolution (Pulse per rev)
 
+uint16_t ms_count = 0;
+extern int16_t position;
+int16_t oldPosition = 0;
+extern uint16_t encoderSpeed;  
+uint16_t encoderRPM;		//Encoder RPM
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern TIM_HandleTypeDef htim4;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -183,7 +189,15 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	ms_count ++;
+	if(ms_count > 1000){
+		if (position >= oldPosition){
+			encoderSpeed = position - oldPosition;
+		}
+		oldPosition = position;
+		encoderRPM = (encoderSpeed*60) / ENCODER_PPR;
+		ms_count = 0;
+	}
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -197,6 +211,20 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles TIM4 global interrupt.
+  */
+void TIM4_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+
+  /* USER CODE END TIM4_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim4);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
+}
 
 /* USER CODE BEGIN 1 */
 

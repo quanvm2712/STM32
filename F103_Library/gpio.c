@@ -1,67 +1,58 @@
 #include "gpio.h"
 
 
-void GPIO_Config(void){
-	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN; //enable gpio port C clock
-	GPIOC->CRH |= (0<<21) | (1<<20);  //output mode 10mhz, push pull
-	
-}
 
 void GPIO_EnableClock(uint8_t GPIO_Port){
 		RCC->APB2ENR |= (1<<GPIO_Port);
 }
 
-void GPIO_Mode(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode){
+void GPIO_Init(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode){
+	GPIO_EnableClock(GPIO_Port);  
+	
 	RCC->APB2ENR |= (1 << 0); //ENABLE AFIO clock
 	AFIO->MAPR |= (1 << 25);//JTAG-DP Disabled and SW-DP Enabled 010 
 	
 	
 	switch(GPIO_Port){
-		
 		case GPIO_A:
-			if(GPIO_Pin < 8){
-				//input mode
-	      if(mode == INPUT){
-					uint32_t config_bit = (GPIO_Pin + 3 * (GPIO_Pin + 1));
-					GPIOA->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input mode with pull up/down
-					GPIOA->CRL |= (1<< config_bit); 
-					GPIOA->CRL &= ~(1<< (config_bit - 1)); 
-					GPIOA->CRL &= ~(1<< (config_bit - 2)); 
-					GPIOA->CRL &= ~(1<< (config_bit - 3)); 
+			// Case 1: GPIO_Pin is less than 8
+			if(GPIO_Pin < 8){	
+				uint8_t config_bit = (GPIO_Pin * 4);
+				
+	      if(mode == GPIO_INPUT){
+					GPIOA->CRL &= ~((0b1111) << config_bit);
+					GPIOA->CRL |= ((0b1000) << config_bit);
+
 				}
-				//output mode
-				else if (mode == OUTPUT){
-					uint32_t config_bit = (GPIO_Pin * 4);
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOA->CRL |= (1 << config_bit);  //10mhz output mode, push-pull
-					GPIOA->CRL &= ~(1 << (config_bit + 1));
-					GPIOA->CRL &= ~(1 << (config_bit + 2));
-					GPIOA->CRL &= ~(1 << (config_bit + 3));
-					
+					GPIOA->CRL &= ~((0b1111) << config_bit);
+					GPIOA->CRL |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOA->CRL &= ~((0b1111) << config_bit);
+					GPIOA->CRL |= ((0b1010) << config_bit);					
 				}
 			}
+			
+			// Case 2: GPIO_Pin is 8 or bigger
 			else if ((GPIO_Pin >= 8) & (GPIO_Pin < 16)){
+				uint8_t config_bit = 4 * (GPIO_Pin - 8);
 				
-				if(mode == INPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8 + 1));
-					GPIOA->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input with pull-up/pull-down
-					GPIOA->CRH |= (1 << config_bit); 
-					GPIOA->CRH &= ~(1 << (config_bit - 1));
-					GPIOA->CRH &= ~(1 << (config_bit - 2));
-					GPIOA->CRH &= ~(1 << (config_bit - 3));
-					
+	      if(mode == GPIO_INPUT){
+					GPIOA->CRH &= ~((0b1111) << config_bit);
+					GPIOA->CRH |= ((0b1000) << config_bit);
+
 				}
-				else if (mode == OUTPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8));
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOA->CRH |= (1 << config_bit);  
-					GPIOA->CRH &= ~(1 << (config_bit + 1));
-					GPIOA->CRH &= ~(1 << (config_bit + 2));
-					GPIOA->CRH &= ~(1 << (config_bit + 3));
-					
-				}			
+					GPIOA->CRH &= ~((0b1111) << config_bit);
+					GPIOA->CRH |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOA->CRH &= ~((0b1111) << config_bit);
+					GPIOA->CRH |= ((0b1010) << config_bit);					
+				}
 			}
 			break;
 			
@@ -69,49 +60,44 @@ void GPIO_Mode(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode){
 			
 
 		case GPIO_B:
-			if(GPIO_Pin < 8){
-				//input mode
-	      if(mode == INPUT){
-					uint32_t config_bit = (GPIO_Pin + 3 * (GPIO_Pin + 1));
-					GPIOB->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input mode with pull up/down
-					GPIOB->CRL |= (1<< config_bit); 
-					GPIOB->CRL &= ~(1<< (config_bit - 1)); 
-					GPIOB->CRL &= ~(1<< (config_bit - 2)); 
-					GPIOB->CRL &= ~(1<< (config_bit - 3)); 
+			// Case 1: GPIO_Pin is less than 8
+			if(GPIO_Pin < 8){	
+				uint8_t config_bit = (GPIO_Pin * 4);
+				
+	      if(mode == GPIO_INPUT){
+					GPIOB->CRL &= ~((0b1111) << config_bit);
+					GPIOB->CRL |= ((0b1000) << config_bit);
+
 				}
-				//output mode
-				else if (mode == OUTPUT){
-					uint32_t config_bit = (GPIO_Pin * 4);
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOB->CRL |= (1 << config_bit);  //10mhz output mode, push-pull
-					GPIOB->CRL &= ~(1 << (config_bit + 1));
-					GPIOB->CRL &= ~(1 << (config_bit + 2));
-					GPIOB->CRL &= ~(1 << (config_bit + 3));
-					
+					GPIOB->CRL &= ~((0b1111) << config_bit);
+					GPIOB->CRL |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOB->CRL &= ~((0b1111) << config_bit);
+					GPIOB->CRL |= ((0b1010) << config_bit);					
 				}
 			}
+			
+			// Case 2: GPIO_Pin is 8 or bigger
 			else if ((GPIO_Pin >= 8) & (GPIO_Pin < 16)){
+				uint8_t config_bit = 4 * (GPIO_Pin - 8);
 				
-				if(mode == INPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8 + 1));
-					GPIOB->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input with pull-up/pull-down
-					GPIOB->CRH |= (1 << config_bit); 
-					GPIOB->CRH &= ~(1 << (config_bit - 1));
-					GPIOB->CRH &= ~(1 << (config_bit - 2));
-					GPIOB->CRH &= ~(1 << (config_bit - 3));
-					
+	      if(mode == GPIO_INPUT){
+					GPIOB->CRH &= ~((0b1111) << config_bit);
+					GPIOB->CRH |= ((0b1000) << config_bit);
+
 				}
-				else if (mode == OUTPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8));
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOB->CRH |= (1 << config_bit);  
-					GPIOB->CRH &= ~(1 << (config_bit + 1));
-					GPIOB->CRH &= ~(1 << (config_bit + 2));
-					GPIOB->CRH &= ~(1 << (config_bit + 3));
-					
-				}			
+					GPIOB->CRH &= ~((0b1111) << config_bit);
+					GPIOB->CRH |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOB->CRH &= ~((0b1111) << config_bit);
+					GPIOB->CRH |= ((0b1010) << config_bit);					
+				}
 			}
 			break;
 			
@@ -119,52 +105,46 @@ void GPIO_Mode(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode){
 			
 			
 		case GPIO_C:
-			if(GPIO_Pin < 8){
-				//input mode
-	      if(mode == INPUT){
-					uint32_t config_bit = (GPIO_Pin + 3 * (GPIO_Pin + 1));
-					GPIOC->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input mode with pull up/down
-					GPIOC->CRL |= (1<< config_bit); 
-					GPIOC->CRL &= ~(1<< (config_bit - 1)); 
-					GPIOC->CRL &= ~(1<< (config_bit - 2)); 
-					GPIOC->CRL &= ~(1<< (config_bit - 3)); 
+			// Case 1: GPIO_Pin is less than 8
+			if(GPIO_Pin < 8){	
+				uint8_t config_bit = (GPIO_Pin * 4);
+				
+	      if(mode == GPIO_INPUT){
+					GPIOC->CRL &= ~((0b1111) << config_bit);
+					GPIOC->CRL |= ((0b1000) << config_bit);
+
 				}
-				//output mode
-				else if (mode == OUTPUT){
-					uint32_t config_bit = (GPIO_Pin * 4);
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOC->CRL |= (1 << config_bit);  //10mhz output mode, push-pull
-					GPIOC->CRL &= ~(1 << (config_bit + 1));
-					GPIOC->CRL &= ~(1 << (config_bit + 2));
-					GPIOC->CRL &= ~(1 << (config_bit + 3));
-					
+					GPIOC->CRL &= ~((0b1111) << config_bit);
+					GPIOC->CRL |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOC->CRL &= ~((0b1111) << config_bit);
+					GPIOC->CRL |= ((0b1010) << config_bit);					
 				}
 			}
+			
+			// Case 2: GPIO_Pin is 8 or bigger
 			else if ((GPIO_Pin >= 8) & (GPIO_Pin < 16)){
+				uint8_t config_bit = 4 * (GPIO_Pin - 8);
 				
-				if(mode == INPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8 + 1));
-					GPIOC->ODR |= (1 << GPIO_Pin);  //Pull up 
-					//Input with pull-up/pull-down
-					GPIOC->CRH |= (1 << config_bit); 
-					GPIOC->CRH &= ~(1 << (config_bit - 1));
-					GPIOC->CRH &= ~(1 << (config_bit - 2));
-					GPIOC->CRH &= ~(1 << (config_bit - 3));
-					
+	      if(mode == GPIO_INPUT){
+					GPIOC->CRH &= ~((0b1111) << config_bit);
+					GPIOC->CRH |= ((0b1000) << config_bit);
+
 				}
-				else if (mode == OUTPUT){
-					uint32_t config_bit = ((GPIO_Pin - 8) + 3 * (GPIO_Pin - 8));
+				else if (mode == GPIO_OUTPUT){
 					//10mhz output mode, push-pull
-					GPIOC->CRH |= (1 << config_bit);  
-					GPIOC->CRH &= ~(1 << (config_bit + 1));
-					GPIOC->CRH &= ~(1 << (config_bit + 2));
-					GPIOC->CRH &= ~(1 << (config_bit + 3));
-					
-				}			
+					GPIOC->CRH &= ~((0b1111) << config_bit);
+					GPIOC->CRH |= ((0b0001) << config_bit);					
+				}
+				else if (mode == AFIO_OUTPUT){
+					GPIOC->CRH &= ~((0b1111) << config_bit);
+					GPIOC->CRH |= ((0b1010) << config_bit);					
+				}
 			}
 			break;
-			
 	}
 }
 
@@ -256,225 +236,22 @@ void GPIO_Toggle(uint8_t GPIO_Port, uint8_t GPIO_Pin){
 }
 
 
-void GPIO_Enable_Interrupt(uint8_t port, uint8_t exti_line, uint8_t edge, uint8_t priority){
-	EXTI->IMR |= (1 << exti_line);  //disable mask for interrupt request line 1
-	
-	//Input edge
-	if (edge == EDGE_FALLING){
-		EXTI->FTSR |= (1 << exti_line);  //falling edge for input line
-		EXTI->RTSR &= ~(1 << exti_line); //disable rising edge detection
-	}
-	else if(edge == EDGE_RISING){
-		EXTI->RTSR |= (1 << exti_line);
-		EXTI->FTSR &= ~(1 << exti_line);
-	}
-	
-	//external interrupt configuration
-	switch(exti_line){
-		
-		//interrupt line 0-3
-		case EXTI_Line_0:
-		case EXTI_Line_1:
-		case EXTI_Line_2:
-		case EXTI_Line_3:
-		{
-			uint32_t config_bit = exti_line * 4;
-			if (port == GPIO_A){
-				AFIO->EXTICR[0] &= ~(1 << config_bit);
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 3));
-			}
-			else if (port == GPIO_B){
-				AFIO->EXTICR[0] |= 	(1 << config_bit);
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 3));				
-			}
+void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode){
+		switch(GPIO_Port){
+			case GPIO_A:
+				if (pullMode == GPIO_PULLDOWN)	GPIOA->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOA->ODR |= (1 << GPIO_Pin);			
+				break;
 			
-			else if (port == GPIO_C){
-				AFIO->EXTICR[0] &= ~(1 << config_bit);
-				AFIO->EXTICR[0] |= 	(1 << (config_bit + 1));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[0] &= ~(1 << (config_bit + 3));				
-			}
-			
+			case GPIO_B:
+				if (pullMode == GPIO_PULLDOWN)	GPIOB->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOB->ODR |= (1 << GPIO_Pin);			
+				break;			
+
+			case GPIO_C:
+				if (pullMode == GPIO_PULLDOWN)	GPIOC->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOC->ODR |= (1 << GPIO_Pin);			
+				break;				
 		}
-		break;
-		
-		
-		case EXTI_Line_4:
-		case EXTI_Line_5:	
-		case EXTI_Line_6:
-		case EXTI_Line_7:
-		{
-			uint32_t config_bit = 4 * (exti_line - 4);
-			if (port == GPIO_A){
-				AFIO->EXTICR[1] &= ~(1 << config_bit);
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 3));
-			}
-			else if (port == GPIO_B){
-				AFIO->EXTICR[1] |= 	(1 << config_bit);
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 3));				
-			}
-			
-			else if (port == GPIO_C){
-				AFIO->EXTICR[1] &= ~(1 << config_bit);
-				AFIO->EXTICR[1] |= 	(1 << (config_bit + 1));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[1] &= ~(1 << (config_bit + 3));				
-			}			
-		}
-		break;
-		
-
-		case EXTI_Line_8:
-		case EXTI_Line_9:
-		case EXTI_Line_10:
-		case EXTI_Line_11:
-		{
-			uint32_t config_bit = 4 * (exti_line - 8);
-			if (port == GPIO_A){
-				AFIO->EXTICR[2] &= ~(1 << config_bit);
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 3));
-			}
-			else if (port == GPIO_B){
-				AFIO->EXTICR[2] |= 	(1 << config_bit);
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 3));				
-			}
-			
-			else if (port == GPIO_C){
-				AFIO->EXTICR[2] &= ~(1 << config_bit);
-				AFIO->EXTICR[2] |= 	(1 << (config_bit + 1));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[2] &= ~(1 << (config_bit + 3));				
-			}			
-		}
-		break;		
-		
-		case EXTI_Line_12:
-		case EXTI_Line_13:
-		case EXTI_Line_14:
-		case EXTI_Line_15:
-		{
-			uint32_t config_bit = 4 * (exti_line - 12);
-			if (port == GPIO_A){
-				AFIO->EXTICR[3] &= ~(1 << config_bit);
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 3));
-			}
-			else if (port == GPIO_B){
-				AFIO->EXTICR[3] |= 	(1 << config_bit);
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 1));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 3));				
-			}
-			
-			else if (port == GPIO_C){
-				AFIO->EXTICR[3] &= ~(1 << config_bit);
-				AFIO->EXTICR[3] |= 	(1 << (config_bit + 1));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 2));
-				AFIO->EXTICR[3] &= ~(1 << (config_bit + 3));				
-			}			
-		}
-		break;				
-	}
-	
-	
-	
-	//set piority and enable interrupt
-	switch(exti_line){
-		case EXTI_Line_0:
-			NVIC_SetPriority(EXTI0_IRQn, priority);
-			NVIC_EnableIRQ(EXTI0_IRQn);	
-			break;
-		
-		case EXTI_Line_1:
-			NVIC_SetPriority(EXTI1_IRQn, priority);
-			NVIC_EnableIRQ(EXTI1_IRQn);	
-			break;
-
-		case EXTI_Line_2:
-			NVIC_SetPriority(EXTI2_IRQn, priority);
-			NVIC_EnableIRQ(EXTI2_IRQn);
-			break;
-		
-		case EXTI_Line_3:
-			NVIC_SetPriority(EXTI3_IRQn, priority);
-			NVIC_EnableIRQ(EXTI3_IRQn);	
-			break;
-		
-		case EXTI_Line_4:
-			NVIC_SetPriority(EXTI4_IRQn, priority);
-			NVIC_EnableIRQ(EXTI4_IRQn);	
-			break;
-
-		case EXTI_Line_5:
-			NVIC_SetPriority(EXTI9_5_IRQn, priority);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);	
-			break;
-
-		case EXTI_Line_6:
-			NVIC_SetPriority(EXTI9_5_IRQn, priority);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);	
-			break;
-
-		case EXTI_Line_7:
-			NVIC_SetPriority(EXTI9_5_IRQn, priority);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);	
-			break;
-
-		case EXTI_Line_8:
-			NVIC_SetPriority(EXTI9_5_IRQn, priority);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);	
-			break;	
-
-		case EXTI_Line_9:
-			NVIC_SetPriority(EXTI9_5_IRQn, priority);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);	
-			break;		
-
-		case EXTI_Line_10:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;
-
-		case EXTI_Line_11:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;
-
-		case EXTI_Line_12:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;
-
-		case EXTI_Line_13:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;	
-
-		case EXTI_Line_14:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;
-		
-		case EXTI_Line_15:
-			NVIC_SetPriority(EXTI15_10_IRQn, priority);
-			NVIC_EnableIRQ(EXTI15_10_IRQn);	
-			break;
-			
-	}
-
 }
-
 
