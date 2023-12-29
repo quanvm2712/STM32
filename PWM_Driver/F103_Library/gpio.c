@@ -236,3 +236,22 @@ void GPIO_Toggle(uint8_t GPIO_Port, uint8_t GPIO_Pin){
 }
 
 
+void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode){
+		switch(GPIO_Port){
+			case GPIO_A:
+				if (pullMode == GPIO_PULLDOWN)	GPIOA->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOA->ODR |= (1 << GPIO_Pin);			
+				break;
+			
+			case GPIO_B:
+				if (pullMode == GPIO_PULLDOWN)	GPIOB->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOB->ODR |= (1 << GPIO_Pin);			
+				break;			
+
+			case GPIO_C:
+				if (pullMode == GPIO_PULLDOWN)	GPIOC->ODR &= ~(1 << GPIO_Pin);
+				else if (pullMode == GPIO_PULLUP) GPIOC->ODR |= (1 << GPIO_Pin);			
+				break;				
+		}
+}
+
