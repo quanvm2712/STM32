@@ -62,5 +62,8 @@ void TIM_PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel);
 void TIM_TIM_ChannelMode_1(uint8_t channel);
 
 
+/*-----------------Encoder Mode User Function---------------------*/
+void TIM_EncoderMode_Init(TIM_TypeDef* Timer, uint8_t Mode);
+void TIM_EncoderStart(TIM_TypeDef* Timer);
 
 #endif //__Timer_H

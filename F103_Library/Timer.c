@@ -121,9 +121,25 @@ void TIM_SetInputCaptureFilter(TIM_TypeDef* Timer, uint8_t InputFilter, uint8_t 
  */
 void TIM_EnableCounter(TIM_TypeDef* Timer){
 	Timer->CR1 |= (1 << 0); //enable counter
-	while (!(Timer->SR & (1<<0))); //wait until counter is overflow
+	//while (!(Timer->SR & (1<<0))); //wait until counter is overflow
 }
 
+
+void TIM_EnableCaptureInput(TIM_TypeDef* Timer, uint8_t Channel){
+	switch(Channel){
+		case TIM_Channel_1:
+			Timer->CCER |= (1 << 0);
+			break;
+		case TIM_Channel_2:
+			Timer->CCER |= (1 << 4);
+			break;	
+		case TIM_Channel_3:
+			Timer->CCER |= (1 << 8);
+		case TIM_Channel_4:
+			Timer->CCER |= (1 << 12);
+			break;			
+	}
+}
 
 
 
@@ -287,6 +303,22 @@ void TIM_PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel){
 
 /*-------------------------------------------------Encoder Module-------------------------------------------*/
 void TIM_EncoderMode_Init(TIM_TypeDef* Timer, uint8_t Mode){
-	TIM_EnableTimerClock(Timer);
+	TIM_EnableTimerClock(Timer);  //Enable clock for selected Timer instance
+	
+	TIM_SetSlaveMode(Timer, Mode);  //Counter is counting on both channels
+	
+	//Set caputre edge for each channel
+	TIM_SetPolarity(Timer, TIM_Channel_1, TIM_EDGE_RISING);
+	TIM_SetPolarity(Timer, TIM_Channel_2, TIM_EDGE_RISING);
+	
+	//Set input dir for each channel and map to corresponding T1x
+	TIM_SetChannelDirection(Timer, TIM_Channel_1, TIM_Channel_INPUT);
+	TIM_SetChannelDirection(Timer, TIM_Channel_2, TIM_Channel_INPUT);
+}
+
+void TIM_EncoderStart(TIM_TypeDef* Timer){
+	TIM_EnableCaptureInput(Timer, TIM_Channel_1);
+	TIM_EnableCaptureInput(Timer, TIM_Channel_1);
+	TIM_EnableCounter(Timer);
 }
 
