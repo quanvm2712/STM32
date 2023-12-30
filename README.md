@@ -1,1 +1,1 @@
-# Project - Temperature Control System Using STM32 Microcontroller
+# Project - Temperature Control System
