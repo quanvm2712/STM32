@@ -142,25 +142,25 @@ void TIM_PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint
 	switch(channel){
 		case TIM_Channel_1:
 			Timer->PSC = prescaler - 1;
-			Timer->ARR = arrValue;
+			Timer->ARR = arrValue - 1;
 			Timer->CCR1 = CCRxValue;
 			break;
 		
 		case TIM_Channel_2:
 			Timer->PSC = prescaler - 1;
-			Timer->ARR = arrValue;
+			Timer->ARR = arrValue - 1;
 			Timer->CCR2 = CCRxValue;	
 			break;
 		
 		case TIM_Channel_3:
 			Timer->PSC = prescaler - 1;
-			Timer->ARR = arrValue;
+			Timer->ARR = arrValue - 1;
 			Timer->CCR3 = CCRxValue;	
 			break;
 
 		case TIM_Channel_4:
 			Timer->PSC = prescaler - 1;
-			Timer->ARR = arrValue;
+			Timer->ARR = arrValue - 1;
 			Timer->CCR4 = CCRxValue;	
 			break;
 	}

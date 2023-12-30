@@ -14,7 +14,7 @@ int main(void){
 	TIM2_Config();
 	
 	GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);
-	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, 100);
+	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, 50);
 	
 	
 	//GPIO_Reset(GPIO_C, 13);
