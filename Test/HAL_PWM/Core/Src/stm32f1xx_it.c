@@ -55,7 +55,7 @@
 
 uint16_t ms_count = 0;
 extern int16_t position;
-int16_t oldPosition = 0;
+uint16_t oldPosition = 0;
 extern uint16_t encoderSpeed;  
 uint16_t encoderRPM;		//Encoder RPM
 /* USER CODE END 0 */
@@ -190,9 +190,9 @@ void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	ms_count ++;
-	if(ms_count > 1000){
+	if(ms_count > 200){
 		if (position >= oldPosition){
-			encoderSpeed = position - oldPosition;
+			encoderSpeed = (position - oldPosition) * 5;
 		}
 		oldPosition = position;
 		encoderRPM = (encoderSpeed*60) / ENCODER_PPR;

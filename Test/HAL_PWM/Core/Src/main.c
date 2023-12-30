@@ -60,12 +60,12 @@ static void MX_TIM4_Init(void);
 /* USER CODE BEGIN 0 */
 
 int16_t counter_value;
-int16_t position;
+uint16_t position;
 uint16_t encoderSpeed;  //Encoder CPS (Count per sec)
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 	counter_value =  __HAL_TIM_GetCounter(htim);
-	position = counter_value / 4;	
+	position = (uint16_t)counter_value / 4;	
 }
 
 /* USER CODE END 0 */
@@ -101,7 +101,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-	TIM3->CCR1 = 40;  //Set PWM duty cycle
+	TIM3->CCR1 = 70;  //Set PWM duty cycle
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 	HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
