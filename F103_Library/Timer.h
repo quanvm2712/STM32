@@ -48,7 +48,7 @@ void TIM_SetChannelDirection(TIM_TypeDef* Timer, uint8_t Channel, uint8_t Channe
 void TIM_EnableCounter(TIM_TypeDef* Timer);
 
 void PWM_EnableUpdateGeneration();
-void TIM_EnableCCOutput(uint8_t channel);
+void TIM_EnableCCOutput(TIM_TypeDef* Timer,uint8_t channel)
 
 
 
