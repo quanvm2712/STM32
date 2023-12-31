@@ -7,6 +7,8 @@ void TIM2_Config(void){
 	TIM2->ARR = 0xffff - 1;  //auto-reload register
 	TIM2->PSC = 72 - 1;  //prescaler
 	
+	
+	
 	//enable counter
 	TIM2->CR1 |= (1<<0);
 	

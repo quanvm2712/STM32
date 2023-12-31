@@ -175,17 +175,7 @@
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>counterDiff,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
           <ItemText>encoderSpeed,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\HAL_PWM\../Core/Src/stm32f1xx_it.c\encoderSpeed,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

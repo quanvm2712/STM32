@@ -48,22 +48,26 @@ void TIM_SetChannelDirection(TIM_TypeDef* Timer, uint8_t Channel, uint8_t Channe
 void TIM_EnableCounter(TIM_TypeDef* Timer);
 
 void PWM_EnableUpdateGeneration();
-void TIM_EnableCCOutput(TIM_TypeDef* Timer,uint8_t channel)
+void TIM_EnableCCOutput(TIM_TypeDef* Timer,uint8_t channel);
 
 
 
 
 /*-----------------PWM User Function---------------------*/
+#define	PWM_Mode_1	0b110
+#define PWM_Mode_2	0b111
+
 void TIM_PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint16_t arrValue, uint16_t CCRxValue);
 void TIM_PWM_Start(TIM_TypeDef* Timer, uint8_t Channel);
 void TIM_PWM_SetPrescaler(uint16_t prescalerValue);
 void TIM_PWM_SetARRReg(uint16_t ARRValue);
 void TIM_PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel);
-void TIM_TIM_ChannelMode_1(uint8_t channel);
+void TIM_ChannelMode_1(uint8_t channel);
+void TIM_PWM_Mode(TIM_TypeDef* Timer, uint8_t channel, uint8_t PWM_Mode);
 
 
 /*-----------------Encoder Mode User Function---------------------*/
-void TIM_EncoderMode_Init(TIM_TypeDef* Timer, uint8_t Mode);
+void TIM_Encoder_Init(TIM_TypeDef* Timer, uint8_t Mode);
 void TIM_EncoderStart(TIM_TypeDef* Timer);
 
 #endif //__Timer_H

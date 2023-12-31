@@ -181,7 +181,11 @@ void TIM_PWM_Init(TIM_TypeDef* Timer, uint16_t channel, uint16_t prescaler, uint
 			break;
 	}
 
-	TIM_ChannelConfig(channel);
+	TIM_SetChannelDirection(Timer, channel, TIM_Channel_OUTPUT);
+	TIM_SetSlaveMode(Timer, SLAVE_DISABLED);
+	TIM_SetPolarity(Timer, channel, TIM_EDGE_RISING);  //Output compare active high
+	TIM_PWM_Mode(Timer, channel, PWM_Mode_1);
+	//TIM_ChannelConfig(channel);
 	//TIM_SetSlaveMode(Timer, SLAVE_EncoderMode_3);
 }
 
@@ -242,6 +246,27 @@ void TIM_ChannelConfig(uint8_t channel){
 }
 
 
+void TIM_PWM_Mode(TIM_TypeDef* Timer, uint8_t channel, uint8_t PWM_Mode){
+	switch(channel){
+		case TIM_Channel_1:
+			Timer->CCMR1 &= ~(0b111 << 4);
+			Timer->CCMR1 |= (PWM_Mode << 4);
+			break;
+		case TIM_Channel_2:
+			Timer->CCMR1 &= ~(0b111 << 12);
+			Timer->CCMR1 |= (PWM_Mode << 12);
+			break;
+		case TIM_Channel_3:
+			Timer->CCMR2 &= ~(0b111 << 4);
+			Timer->CCMR2 |= (PWM_Mode << 4);
+			break;
+		case TIM_Channel_4:
+			Timer->CCMR2 &= ~(0b111 << 12);
+			Timer->CCMR2 |= (PWM_Mode << 12);
+			break;
+	}
+}
+
 
 /**
 	*	@brief	Enable Update Generation for TIM 
@@ -300,7 +325,7 @@ void TIM_PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel){
 
 
 /*-------------------------------------------------Encoder Module-------------------------------------------*/
-void TIM_EncoderMode_Init(TIM_TypeDef* Timer, uint8_t Mode){
+void TIM_Encoder_Init(TIM_TypeDef* Timer, uint8_t Mode){
 	TIM_EnableTimerClock(Timer);  //Enable clock for selected Timer instance
 	
 	TIM_SetSlaveMode(Timer, Mode);  //Counter is counting on both channels
