@@ -286,35 +286,35 @@ void TIM_PWM_Start(TIM_TypeDef* Timer, uint8_t Channel){
 }
 
 
-void TIM_PWM_SetPrescaler(uint16_t prescalerValue){
-	Timer_global->PSC = prescalerValue - 1;
+void TIM_SetPrescaler(TIM_TypeDef* Timer,uint16_t prescalerValue){
+	Timer->PSC = prescalerValue - 1;
 }
 
 
 
 
-void TIM_PWM_SetARRReg(uint16_t ARRValue){
-	Timer_global->ARR = ARRValue;
+void TIM_SetARRReg(TIM_TypeDef* Timer, uint16_t ARRValue){
+	Timer->ARR = ARRValue;
 }
 
 
 
-void TIM_PWM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel){
+void TIM_SetCCRxReg(TIM_TypeDef* Timer, uint16_t CCRxValue, uint16_t channel){
 	switch(channel){
 		case TIM_Channel_1:
-			Timer_global->CCR1 = CCRxValue;
+			Timer->CCR1 = CCRxValue;
 			break;
 		
 		case TIM_Channel_2:
-			Timer_global->CCR2 = CCRxValue;
+			Timer->CCR2 = CCRxValue;
 			break;
 
 		case TIM_Channel_3:
-			Timer_global->CCR3 = CCRxValue;
+			Timer->CCR3 = CCRxValue;
 			break;
 
 		case TIM_Channel_4:
-			Timer_global->CCR4 = CCRxValue;
+			Timer->CCR4 = CCRxValue;
 			break;		
 	}
 }

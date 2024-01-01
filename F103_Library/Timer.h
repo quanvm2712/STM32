@@ -46,9 +46,9 @@ void TIM_SetSlaveMode(TIM_TypeDef* Timer, uint8_t SlaveMode);
 void TIM_SetPolarity(TIM_TypeDef* Timer, uint8_t Channel, uint8_t Edge);
 void TIM_SetChannelDirection(TIM_TypeDef* Timer, uint8_t Channel, uint8_t ChannelDir);
 void TIM_EnableCounter(TIM_TypeDef* Timer);
-void TIM_SetPrescaler(uint16_t prescalerValue);
-void TIM_SetARRReg(uint16_t ARRValue);
-void TIM_SetCCRxReg(uint16_t CCRxValue, uint16_t channel);
+void TIM_SetPrescaler( TIM_TypeDef* Timer,uint16_t prescalerValue);
+void TIM_SetARRReg(TIM_TypeDef* Timer, uint16_t ARRValue);
+void TIM_SetCCRxReg(TIM_TypeDef* Timer, uint16_t CCRxValue, uint16_t channel);
 
 void PWM_EnableUpdateGeneration();
 void TIM_EnableCCOutput(TIM_TypeDef* Timer,uint8_t channel);

@@ -2,6 +2,7 @@
 #include "gpio.h"
 #include "delay.h"
 #include "Timer.h"
+#include "stdlib.h"
 
 #define ENCODER_PPR 30
 
@@ -9,8 +10,10 @@ int counterVal = 0;
 uint16_t position = 0;
 uint16_t old_position = 0;
 uint16_t encoderPPS = 0;
-uint16_t encoderRPM = 0;
+uint16_t currentFanRPM = 0;
 uint16_t ms_count = 0;
+int16_t duty_cycle = 100;
+int error;
 
 void TIM1_UP_IRQHandler(){
 	if(TIM1->SR & 0x1){  //Check if interrupt flag is set
@@ -20,7 +23,7 @@ void TIM1_UP_IRQHandler(){
 			if (position >= old_position){
 				encoderPPS = (position - old_position) * 5;  
 			}
-			encoderRPM = (encoderPPS * 60) / ENCODER_PPR;
+			currentFanRPM = (encoderPPS * 60) / ENCODER_PPR;
 			old_position = position;
 			ms_count = 0;
 		}
@@ -55,6 +58,22 @@ void Set_InputFilter(){
 	TIM3->CCMR1 |= (0b1010 << 12);
 }
 
+void Set_FanSpeed(uint16_t DesiredFanRPM){
+	int error = DesiredFanRPM - currentFanRPM;
+	
+	if(error > 0){
+		duty_cycle += 1;
+	}
+	else if (error < 0){
+		duty_cycle -= 1;
+	}
+	
+	if(duty_cycle > 100) duty_cycle = 100;
+	else if (duty_cycle < 0) duty_cycle = 0;
+	
+	TIM_SetCCRxReg(TIM3,duty_cycle, TIM_Channel_1);
+}
+
 int main(void){
 	SystemInit();
 	TIM2_Config();
@@ -67,7 +86,7 @@ int main(void){
 	GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);
 	
 	//PWM Init and run
-	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, 70);
+	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, duty_cycle);
 	TIM_PWM_Start(TIM3, TIM_Channel_1);
 	
 	//Encoder Mode Init and run
@@ -77,6 +96,8 @@ int main(void){
 	
 	while(1){
 		counterVal = TIM4->CNT; //Get current counter value from timer 3
+		Set_FanSpeed(1000);
+		delay_us(100);
 		//led_blink();
 	}
 	

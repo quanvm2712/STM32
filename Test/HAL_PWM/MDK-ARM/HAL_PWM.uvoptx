@@ -177,6 +177,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>encoderSpeed,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>encoderRPM,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
