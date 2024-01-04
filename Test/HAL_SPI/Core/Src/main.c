@@ -70,6 +70,9 @@ void toggle_led(){
 void max7219_writeData(uint8_t address, uint8_t data){
 	CS_PIN_Set();
 	HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &address, 1, HAL_MAX_DELAY);
+	CS_PIN_Reset();
+	
+	CS_PIN_Set();
 	HAL_StatusTypeDef fd2 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
 	CS_PIN_Reset();
 	//HAL_Delay(50);
@@ -140,13 +143,17 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	//max7219_TurnOn();
+	max7219_Clean();
 	uint8_t data = 0xEF;
-	CS_PIN_Set();
-	HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
-	CS_PIN_Reset();
+	
+	//CS_PIN_Set();
+	//HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
+	//CS_PIN_Reset();
+	//max7219_TurnOn();
 	max7219_TurnOn();
 	max7219_SetIntensity(0xa);
-  while (1)
+  
+	while (1)
   {
     /* USER CODE END WHILE */
 

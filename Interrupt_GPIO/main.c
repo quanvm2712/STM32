@@ -2,6 +2,7 @@
 #include "delay.h"
 #include "gpio.h"
 
+volatile int count = 0;
 
 void EXTI9_5_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
@@ -25,7 +26,7 @@ int main(void){
 	
 	GPIO_Enable_Interrupt(GPIO_C, EXTI_Line_15, EDGE_FALLING, 0);
 	
-
+	count += 1;
 	
 	while(1){
 
