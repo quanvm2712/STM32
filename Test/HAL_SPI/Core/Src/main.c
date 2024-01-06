@@ -55,6 +55,8 @@ static void MX_SPI1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#define CS_PIN_Set()		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+#define CS_PIN_Reset()	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 
 void toggle_led(){
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
@@ -66,10 +68,13 @@ void toggle_led(){
 
 //Config MAX7219
 void max7219_writeData(uint8_t address, uint8_t data){
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+	CS_PIN_Set();
 	HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &address, 1, HAL_MAX_DELAY);
+	CS_PIN_Reset();
+	
+	CS_PIN_Set();
 	HAL_StatusTypeDef fd2 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+	CS_PIN_Reset();
 	//HAL_Delay(50);
 	if(fd1 == HAL_OK && fd2 == HAL_OK) toggle_led();
 }
@@ -128,21 +133,32 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+	CS_PIN_Reset();
 	
-	max7219_Clean();
-	max7219_TurnOn();
-	max7219_SetIntensity(0xa);
+
+	//max7219_Clean();
 	//max7219_SetScanLimit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+	//max7219_TurnOn();
+	max7219_Clean();
+	uint8_t data = 0xEF;
+	
+	//CS_PIN_Set();
+	//HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
+	//CS_PIN_Reset();
+	//max7219_TurnOn();
+	max7219_TurnOn();
+	max7219_SetIntensity(0xa);
+  
+	while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		//max7219_TurnOn();
 	
   }
   /* USER CODE END 3 */
@@ -207,7 +223,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;

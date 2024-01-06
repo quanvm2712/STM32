@@ -1,5 +1,5 @@
-#ifndef GPIO_H
-#define	GPIO_H
+#ifndef __GPIO_H
+#define	__GPIO_H
 
 #include "stm32f10x.h"
 #include "stdbool.h"
@@ -31,4 +31,4 @@ void GPIO_Reset(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Toggle(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode);
 
-#endif //GPIO_H
+#endif //__GPIO_H
