@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\F103_Library</IncludePath>
+              <IncludePath>..\F103_Library;..\Hardware_Library</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -429,6 +429,16 @@
               <FileName>Timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\F103_Library\Timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>MAX7219.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware_Library\MAX7219.c</FilePath>
+            </File>
+            <File>
+              <FileName>MAX7219.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware_Library\MAX7219.h</FilePath>
             </File>
           </Files>
         </Group>
