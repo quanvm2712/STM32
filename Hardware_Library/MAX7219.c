@@ -51,27 +51,38 @@ void MAX7219_Init(uint8_t Intensity, uint8_t ScanLimit, uint8_t DecodeMode){
 	MAX7219_SetDecodeMode(DecodeMode);
 }
 
-void MAX7219_PrintString(char* StringToPrint, uint8_t StartPosition){
-	uint8_t stringSize = strlen(StringToPrint);
-	uint8_t count = 1;
-	while(count <= stringSize){
-		uint8_t dataInt = StringToPrint[stringSize - count] - '0';
-		MAX7219_SendData(count, DigitCodes[dataInt]);
-		count++; 
-	}
-	while(count <= 8){
-		MAX7219_SendData(count++, 0);
+void MAX7219_EmptyAllDigits(void){
+	for(int i=1; i<=8; i++){
+		MAX7219_SendData(i, 0);
 	}
 }
 
-void MAX7219_PrintInt(uint32_t IntToPrint){
-	uint8_t position = 1;
-	while(IntToPrint){
-		uint8_t digitToPrint = IntToPrint % 10;
-		MAX7219_SendData(position++, DigitCodes[digitToPrint]);
+void MAX7219_PrintString(char* StringToPrint, uint8_t StartPosition){
+	MAX7219_EmptyAllDigits();
+	
+	while(*StringToPrint){
+		uint8_t digit = *(StringToPrint++) - '0';
+		MAX7219_SendData(StartPosition + 1, DigitCodes[digit]);
+		StartPosition--;
+	}
+}
+
+void MAX7219_PrintInt(uint32_t IntToPrint, uint8_t NumOfDigits, uint8_t StartPosition){
+	MAX7219_EmptyAllDigits();
+
+	uint8_t IntDigit[NumOfDigits];
+	int8_t count = 0;
+	
+	while(count < NumOfDigits){
+		IntDigit[count++] = IntToPrint % 10;
 		IntToPrint /= 10;
 	}
-	while(position <= 8){
-		MAX7219_SendData(position++, 0);
+	count = NumOfDigits - 1;
+	
+	while(count >= 0){
+		MAX7219_SendData(StartPosition + 1, DigitCodes[IntDigit[count]]);
+		count--;
+		StartPosition--;
 	}
+	
 }

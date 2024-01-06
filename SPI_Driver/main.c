@@ -26,9 +26,9 @@ int main(void){
 	//MAX7219_PrintInt(200);
 	
 	while(1){
-		MAX7219_PrintString("2712", 7);
+		MAX7219_PrintString("2712", 6);
 		delay_ms(1000);
-		MAX7219_PrintInt(2001);
+		MAX7219_PrintInt(2001, 4, 5);
 		delay_ms(1000);
 	}
 }

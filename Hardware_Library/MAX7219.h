@@ -33,5 +33,5 @@ void MAX7219_Clean(void);
 void MAX7219_SetDecodeMode(uint8_t DecodeMode);
 void MAX7219_Init(uint8_t Intensity, uint8_t ScanLimit, uint8_t DecodeMode);
 void MAX7219_PrintString(char* StringToPrint, uint8_t StartPosition);
-void MAX7219_PrintInt(uint32_t IntToPrint);
+void MAX7219_PrintInt(uint32_t IntToPrint, uint8_t NumOfDigits, uint8_t StartPosition);
 #endif	//__MAX7219_H
