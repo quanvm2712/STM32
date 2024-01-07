@@ -75,7 +75,7 @@ void Set_FanSpeed(uint16_t DesiredFanRPM){
 	if(control_signal > 100.0) control_signal = 100.0;
 	else if(control_signal < 0.0) control_signal = 0.0;
 	
-	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_1);
+	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_3);
 }
 
 int main(void){
@@ -87,11 +87,11 @@ int main(void){
 	GPIO_Init(GPIO_C, 13, GPIO_OUTPUT);
 	
 	//Init Timer 3 channel 1 IO for PWM functionality
-	GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);
+	GPIO_Init(GPIO_B, 0, AFIO_OUTPUT);
 	
 	//PWM Init and run
-	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, 50);
-	TIM_PWM_Start(TIM3, TIM_Channel_1);
+	TIM_PWM_Init(TIM3, TIM_Channel_3, 72, 100, 50);
+	TIM_PWM_Start(TIM3, TIM_Channel_3);
 	
 	//Encoder Mode Init and run
 	TIM_Encoder_Init(TIM4, SLAVE_EncoderMode_3);
