@@ -51,6 +51,9 @@ void SPI_SetFrameFormat(SPI_TypeDef* SPIx, uint8_t Format){
 }
 
 
+/**
+	@brief	SPI initialization function. By default, it sets SPI to run at full-duplex mode with software slave select.
+*/
 void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode){
 	SPI_EnableClock(SPIx);
 	
@@ -60,10 +63,9 @@ void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode){
 	SPI_SetSourceClock(SPIx);												//9Mb/s baudrate
 	SPI_SoftwareSlaveSelect_Enable(SPIx);
 	SPI_SetFrameFormat(SPIx, SPI_MSBFirst);
-	//SPI_SetTransmitOnlyMode();
 	
+	SPI_IO_Init(SPIx);
 	SPI_Enable(SPIx);
-	//delay_ms(1);
 	
 }
 
@@ -72,16 +74,26 @@ void SPI_SetTransmitOnlyMode(void){
 	SPI1->CR1 |= (1 << 14);		//Output enable
 }
 
-void SPI_IO_Init(void){
+void SPI_IO_Init(SPI_TypeDef* SPIx){
 	//Init CS IO
-	GPIO_Init(GPIO_A, 4, GPIO_OUTPUT);
-	GPIO_PullUpDown(GPIO_A, 4, GPIO_PULLUP);
-	
-	//Init SPI1 IO
-	GPIO_Init(GPIO_A, 5, AFIO_OUTPUT);  //CLK
-	GPIO_PullUpDown(GPIO_A, 5, GPIO_PULLDOWN);
-	GPIO_Init(GPIO_A, 7, AFIO_OUTPUT);	//MOSI
-	GPIO_PullUpDown(GPIO_A, 7, GPIO_PULLDOWN);
+	if(SPIx == SPI1){
+		GPIO_Init(GPIO_A, 4, GPIO_OUTPUT);
+		GPIO_PullUpDown(GPIO_A, 4, GPIO_PULLUP);
+		
+		//Init SPI1 IO
+		GPIO_Init(GPIO_A, 5, AFIO_OUTPUT);  //CLK
+		//GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);  
+		GPIO_Init(GPIO_A, 7, AFIO_OUTPUT);	//MOSI	
+	}
+	else if(SPIx==SPI2){
+		GPIO_Init(GPIO_B, 12, GPIO_OUTPUT);
+		GPIO_PullUpDown(GPIO_B, 12, GPIO_PULLUP);	
+
+		//Init SPI1 IO
+		GPIO_Init(GPIO_B, 13, AFIO_OUTPUT);  //CLK
+		GPIO_Init(GPIO_B, 14, AFIO_OUTPUT);	//MOSI
+		GPIO_Init(GPIO_B, 15, AFIO_OUTPUT);	//MOSI		
+	}
 }
 
 void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){

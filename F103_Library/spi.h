@@ -26,15 +26,15 @@
 #define SPI_LSBFirst				1
 
 void SPI_EnableClock(SPI_TypeDef* SPIx);
+
 void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode);
-void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize);
-void SPI_IO_Init(void);
+void SPI_IO_Init(SPI_TypeDef* SPIx);
 void SPI_SetTransmitOnlyMode(void);
 void SPI_SetClockPolarity(SPI_TypeDef* SPIx, uint8_t ClockPolarity);
 void SPI_SetMasterSlave(SPI_TypeDef* SPIx, uint8_t Mode);
 void SPI_SoftwareSlaveSelect_Enable(SPI_TypeDef* SPIx);
 void SPI_SetFrameFormat(SPI_TypeDef* SPIx, uint8_t Format);
 
-
+void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize);
 #define	SPI	((SPI1_Typedef*)SPI_BASE_1)
 #endif	//__SPI_H
