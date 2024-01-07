@@ -1,6 +1,7 @@
 #include "MAX7219.h"
 #include "string.h"
 
+
 uint8_t DigitCodes[10] = {
     0x7E, // Hex code for 0
     0x30, // Hex code for 1
@@ -13,6 +14,8 @@ uint8_t DigitCodes[10] = {
     0x7F, // Hex code for 8
     0x7B  // Hex code for 9
 };
+
+
 
 void MAX7219_SendData(uint8_t address, uint8_t data){
 	CS_Set();

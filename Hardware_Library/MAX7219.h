@@ -23,7 +23,15 @@
 #define DECODE_MODE_DIGIT_0_TO_3	0x0F		
 #define DECODE_MODE_DIGIT_0_TO_7	0xFF
 
-
+/*Digit position*/
+#define	DIGIT_POSITION_0		0
+#define	DIGIT_POSITION_1		1
+#define	DIGIT_POSITION_2		2
+#define	DIGIT_POSITION_3		3
+#define	DIGIT_POSITION_4		4
+#define	DIGIT_POSITION_5		5
+#define	DIGIT_POSITION_6		6
+#define	DIGIT_POSITION_7		7
 
 void MAX7219_SendData(uint8_t address, uint8_t data);
 void MAX7219_PowerOn(void);
