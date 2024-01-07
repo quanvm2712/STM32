@@ -10,7 +10,6 @@ int main(void){
 	SystemInit();
 	TIM2_Config();
 	
-	SPI_IO_Init();
 	SPI_Init(SPI1, SPI_Master);
 
 	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);

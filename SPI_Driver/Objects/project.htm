@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\Objects\project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sat Jan  6 22:05:16 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Jan  7 20:46:33 2024
 <BR><P>
-<H3>Maximum Stack Usage =        100 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        116 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+__rt_entry_main &rArr; main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 <P>
 <H3>
 Functions with no stack information
@@ -206,8 +206,8 @@ Global Symbols
 <P><STRONG><a name="[88]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[40]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 100 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 116 + Unknown Stack Size
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
 <BR>[Calls]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -605,19 +605,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
 </UL>
 
-<P><STRONG><a name="[57]"></a>SPI_IO_Init</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, spi.o(.text.SPI_IO_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+<P><STRONG><a name="[57]"></a>SPI_IO_Init</STRONG> (Thumb, 162 bytes, Stack size 40 bytes, spi.o(.text.SPI_IO_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
 <BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PullUpDown
 <LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
 </UL>
 
-<P><STRONG><a name="[59]"></a>SPI_Init</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, spi.o(.text.SPI_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = SPI_Init &rArr; SPI_SetFrameFormat
+<P><STRONG><a name="[59]"></a>SPI_Init</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, spi.o(.text.SPI_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
-<BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetFrameFormat
+<BR>[Calls]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_IO_Init
+<LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetFrameFormat
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SoftwareSlaveSelect_Enable
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Enable
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetSourceClock
@@ -698,15 +699,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
 
-<P><STRONG><a name="[41]"></a>main</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<P><STRONG><a name="[41]"></a>main</STRONG> (Thumb, 88 bytes, Stack size 24 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_PrintInt
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_PrintString
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_Init
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
-<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_IO_Init
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Config
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
 </UL>
