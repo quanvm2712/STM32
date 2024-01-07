@@ -11,9 +11,9 @@ int main(void){
 	TIM2_Config();
 	
 	SPI_Init(SPI1, SPI_Master);
-
+	MAX7219_Clean();
 	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
-	
+
 	while(1){
 		MAX7219_PrintString("2712", DIGIT_POSITION_6);
 		delay_ms(1000);

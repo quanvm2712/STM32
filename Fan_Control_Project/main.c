@@ -77,7 +77,7 @@ void Set_FanSpeed(uint16_t DesiredFanRPM){
 	if(control_signal > 100.0) control_signal = 100.0;
 	else if(control_signal < 0.0) control_signal = 0.0;
 	
-	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_1);
+	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_3);
 }
 
 int main(void){
@@ -86,27 +86,26 @@ int main(void){
 	TIM1_Config(); //Init timer 1 to generate interrupt every 1ms
 	
 	//Init SPI and MAX7219 sensor
-	//SPI_Init(SPI1, SPI_Master);
-	//MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
+	SPI_Init(SPI1, SPI_Master);
+	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
 
+	
 	//Init Timer 3 channel 1 IO for PWM functionality
-	GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);	
+	GPIO_Init(GPIO_B, 0, AFIO_OUTPUT);	
 	//PWM Init and run
-	TIM_PWM_Init(TIM3, TIM_Channel_1, 72, 100, 50);
-	TIM_PWM_Start(TIM3, TIM_Channel_1);
+	TIM_PWM_Init(TIM3, TIM_Channel_3, 72, 100, 50);
+	TIM_PWM_Start(TIM3, TIM_Channel_3);
 	
 	//Encoder Mode Init and run
 	TIM_Encoder_Init(TIM4, SLAVE_EncoderMode_3);
 	TIM_EncoderStart(TIM4);
 	
-	while(1){
-		//MAX7219_PrintString("2712", DIGIT_POSITION_6);
-		//delay_ms(1000);
-		//MAX7219_PrintInt(2001, 4, DIGIT_POSITION_5);
-		//delay_ms(1000);
-		
+	while(1){	
 		counterVal = TIM4->CNT; //Get current counter value from timer 3
 		Set_FanSpeed(3000);		
+		
+		MAX7219_PrintInt(currentFanRPM, 4, DIGIT_POSITION_3);
+		delay_ms(100);
 	}
 	return 0;
 }
