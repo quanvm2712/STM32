@@ -86,8 +86,8 @@ int main(void){
 	TIM1_Config(); //Init timer 1 to generate interrupt every 1ms
 	
 	//Init SPI and MAX7219 sensor
-	//SPI_Init(SPI1, SPI_Master);
-	//MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
+	SPI_Init(SPI1, SPI_Master);
+	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
 
 	
 	//Init Timer 3 channel 1 IO for PWM functionality

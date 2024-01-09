@@ -32,25 +32,26 @@ namespace Fan_Control_System
             this.components = new System.ComponentModel.Container();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.gbUART = new System.Windows.Forms.GroupBox();
-            this.cbCOMPort = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cbBaudrate = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cbBitLength = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cbParity = new System.Windows.Forms.ComboBox();
+            this.lbConnectStatus = new System.Windows.Forms.Label();
+            this.btConnect = new System.Windows.Forms.Button();
+            this.btDisconnect = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.cbStopBit = new System.Windows.Forms.ComboBox();
-            this.btDisconnect = new System.Windows.Forms.Button();
-            this.btConnect = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbParity = new System.Windows.Forms.ComboBox();
+            this.cbBitLength = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbBaudrate = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbCOMPort = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.lbConnectStatus = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.tbDutyCycle = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.tbDutyCycle = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.gbUART.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -81,81 +82,37 @@ namespace Fan_Control_System
             this.gbUART.Text = "UART Configuration";
             this.gbUART.Enter += new System.EventHandler(this.gbUART_Enter);
             // 
-            // cbCOMPort
+            // lbConnectStatus
             // 
-            this.cbCOMPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbCOMPort.FormattingEnabled = true;
-            this.cbCOMPort.Location = new System.Drawing.Point(109, 38);
-            this.cbCOMPort.Name = "cbCOMPort";
-            this.cbCOMPort.Size = new System.Drawing.Size(140, 24);
-            this.cbCOMPort.TabIndex = 0;
-            this.cbCOMPort.SelectedIndexChanged += new System.EventHandler(this.cbCOMPort_SelectedIndexChanged);
+            this.lbConnectStatus.BackColor = System.Drawing.Color.Silver;
+            this.lbConnectStatus.Location = new System.Drawing.Point(17, 317);
+            this.lbConnectStatus.Name = "lbConnectStatus";
+            this.lbConnectStatus.Size = new System.Drawing.Size(232, 40);
+            this.lbConnectStatus.TabIndex = 10;
+            this.lbConnectStatus.Text = "Disconnected";
+            this.lbConnectStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
+            // btConnect
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 41);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "COM Port";
+            this.btConnect.BackColor = System.Drawing.Color.PaleGreen;
+            this.btConnect.Location = new System.Drawing.Point(127, 256);
+            this.btConnect.Name = "btConnect";
+            this.btConnect.Size = new System.Drawing.Size(122, 45);
+            this.btConnect.TabIndex = 9;
+            this.btConnect.Text = "Connect";
+            this.btConnect.UseVisualStyleBackColor = false;
+            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
             // 
-            // label2
+            // btDisconnect
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 82);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 16);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Baudrate";
-            // 
-            // cbBaudrate
-            // 
-            this.cbBaudrate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBaudrate.FormattingEnabled = true;
-            this.cbBaudrate.Location = new System.Drawing.Point(109, 79);
-            this.cbBaudrate.Name = "cbBaudrate";
-            this.cbBaudrate.Size = new System.Drawing.Size(140, 24);
-            this.cbBaudrate.TabIndex = 2;
-            this.cbBaudrate.Text = "9600";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 125);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 16);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Bit length";
-            // 
-            // cbBitLength
-            // 
-            this.cbBitLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBitLength.FormattingEnabled = true;
-            this.cbBitLength.Location = new System.Drawing.Point(109, 122);
-            this.cbBitLength.Name = "cbBitLength";
-            this.cbBitLength.Size = new System.Drawing.Size(140, 24);
-            this.cbBitLength.TabIndex = 4;
-            this.cbBitLength.Text = "8";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 167);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 16);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Parity";
-            // 
-            // cbParity
-            // 
-            this.cbParity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbParity.FormattingEnabled = true;
-            this.cbParity.Location = new System.Drawing.Point(109, 164);
-            this.cbParity.Name = "cbParity";
-            this.cbParity.Size = new System.Drawing.Size(140, 24);
-            this.cbParity.TabIndex = 4;
-            this.cbParity.Text = "None";
+            this.btDisconnect.BackColor = System.Drawing.Color.Silver;
+            this.btDisconnect.Location = new System.Drawing.Point(17, 256);
+            this.btDisconnect.Name = "btDisconnect";
+            this.btDisconnect.Size = new System.Drawing.Size(104, 45);
+            this.btDisconnect.TabIndex = 8;
+            this.btDisconnect.Text = "Disconnect";
+            this.btDisconnect.UseVisualStyleBackColor = false;
+            this.btDisconnect.Click += new System.EventHandler(this.btDisconnect_Click);
             // 
             // label5
             // 
@@ -176,27 +133,81 @@ namespace Fan_Control_System
             this.cbStopBit.TabIndex = 6;
             this.cbStopBit.Text = "One";
             // 
-            // btDisconnect
+            // label4
             // 
-            this.btDisconnect.BackColor = System.Drawing.Color.Silver;
-            this.btDisconnect.Location = new System.Drawing.Point(17, 256);
-            this.btDisconnect.Name = "btDisconnect";
-            this.btDisconnect.Size = new System.Drawing.Size(104, 45);
-            this.btDisconnect.TabIndex = 8;
-            this.btDisconnect.Text = "Disconnect";
-            this.btDisconnect.UseVisualStyleBackColor = false;
-            this.btDisconnect.Click += new System.EventHandler(this.btDisconnect_Click);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(14, 167);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 16);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Parity";
             // 
-            // btConnect
+            // label3
             // 
-            this.btConnect.BackColor = System.Drawing.Color.PaleGreen;
-            this.btConnect.Location = new System.Drawing.Point(127, 256);
-            this.btConnect.Name = "btConnect";
-            this.btConnect.Size = new System.Drawing.Size(122, 45);
-            this.btConnect.TabIndex = 9;
-            this.btConnect.Text = "Connect";
-            this.btConnect.UseVisualStyleBackColor = false;
-            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 125);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 16);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Bit length";
+            // 
+            // cbParity
+            // 
+            this.cbParity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParity.FormattingEnabled = true;
+            this.cbParity.Location = new System.Drawing.Point(109, 164);
+            this.cbParity.Name = "cbParity";
+            this.cbParity.Size = new System.Drawing.Size(140, 24);
+            this.cbParity.TabIndex = 4;
+            this.cbParity.Text = "None";
+            // 
+            // cbBitLength
+            // 
+            this.cbBitLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBitLength.FormattingEnabled = true;
+            this.cbBitLength.Location = new System.Drawing.Point(109, 122);
+            this.cbBitLength.Name = "cbBitLength";
+            this.cbBitLength.Size = new System.Drawing.Size(140, 24);
+            this.cbBitLength.TabIndex = 4;
+            this.cbBitLength.Text = "8";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 16);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Baudrate";
+            // 
+            // cbBaudrate
+            // 
+            this.cbBaudrate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaudrate.FormattingEnabled = true;
+            this.cbBaudrate.Location = new System.Drawing.Point(109, 79);
+            this.cbBaudrate.Name = "cbBaudrate";
+            this.cbBaudrate.Size = new System.Drawing.Size(140, 24);
+            this.cbBaudrate.TabIndex = 2;
+            this.cbBaudrate.Text = "9600";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 16);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "COM Port";
+            // 
+            // cbCOMPort
+            // 
+            this.cbCOMPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbCOMPort.FormattingEnabled = true;
+            this.cbCOMPort.Location = new System.Drawing.Point(109, 38);
+            this.cbCOMPort.Name = "cbCOMPort";
+            this.cbCOMPort.Size = new System.Drawing.Size(140, 24);
+            this.cbCOMPort.TabIndex = 0;
+            this.cbCOMPort.SelectedIndexChanged += new System.EventHandler(this.cbCOMPort_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -207,16 +218,6 @@ namespace Fan_Control_System
             this.label6.TabIndex = 1;
             this.label6.Text = "label6";
             // 
-            // lbConnectStatus
-            // 
-            this.lbConnectStatus.BackColor = System.Drawing.Color.Silver;
-            this.lbConnectStatus.Location = new System.Drawing.Point(17, 317);
-            this.lbConnectStatus.Name = "lbConnectStatus";
-            this.lbConnectStatus.Size = new System.Drawing.Size(232, 40);
-            this.lbConnectStatus.TabIndex = 10;
-            this.lbConnectStatus.Text = "Disconnected";
-            this.lbConnectStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.button2);
@@ -224,10 +225,29 @@ namespace Fan_Control_System
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Location = new System.Drawing.Point(301, 292);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(296, 107);
+            this.groupBox1.Size = new System.Drawing.Size(250, 107);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PWM Control";
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.button2.Location = new System.Drawing.Point(107, 72);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(126, 29);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Send";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // tbDutyCycle
+            // 
+            this.tbDutyCycle.Location = new System.Drawing.Point(107, 30);
+            this.tbDutyCycle.Name = "tbDutyCycle";
+            this.tbDutyCycle.Size = new System.Drawing.Size(126, 22);
+            this.tbDutyCycle.TabIndex = 1;
+            this.tbDutyCycle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Enter);
             // 
             // label7
             // 
@@ -241,14 +261,6 @@ namespace Fan_Control_System
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
-            // tbDutyCycle
-            // 
-            this.tbDutyCycle.Location = new System.Drawing.Point(107, 30);
-            this.tbDutyCycle.Name = "tbDutyCycle";
-            this.tbDutyCycle.Size = new System.Drawing.Size(183, 22);
-            this.tbDutyCycle.TabIndex = 1;
-            this.tbDutyCycle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Enter);
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(0, 0);
@@ -258,22 +270,21 @@ namespace Fan_Control_System
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // groupBox2
             // 
-            this.button2.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.button2.Location = new System.Drawing.Point(145, 68);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(144, 29);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Send";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.groupBox2.Location = new System.Drawing.Point(301, 22);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(592, 249);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "System monitor";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 433);
+            this.ClientSize = new System.Drawing.Size(953, 421);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label6);
@@ -314,6 +325,7 @@ namespace Fan_Control_System
         private System.Windows.Forms.TextBox tbDutyCycle;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 

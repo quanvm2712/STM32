@@ -1,7 +1,7 @@
 #ifndef __GPIO_H
 #define	__GPIO_H
 
-#include "stm32f10x.h"
+#include "main.h"
 #include "stdbool.h"
 
 //GPIO Port 
@@ -19,8 +19,8 @@
 #define AFIO_OUTPUT		2
 
 //PULL UP/DOWN
-#define	GPIO_PULLUP		0
-#define GPIO_PULLDOWN	1
+#define	GPIO_PIN_PULLUP		0
+#define GPIO_PIN_PULLDOWN	1
 
 
 
