@@ -52,9 +52,20 @@ namespace Fan_Control_System
             this.label7 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tbFanRPM = new System.Windows.Forms.TextBox();
+            this.rtbFanRPM = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.gbUART.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // serialPort1
+            // 
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // gbUART
             // 
@@ -272,12 +283,60 @@ namespace Fan_Control_System
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox4);
+            this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Location = new System.Drawing.Point(301, 22);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(592, 249);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "System monitor";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Location = new System.Drawing.Point(310, 38);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(259, 184);
+            this.groupBox4.TabIndex = 1;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Temperature monitor";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.tbFanRPM);
+            this.groupBox3.Controls.Add(this.rtbFanRPM);
+            this.groupBox3.Location = new System.Drawing.Point(15, 38);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(260, 184);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Fan monitor";
+            // 
+            // tbFanRPM
+            // 
+            this.tbFanRPM.Location = new System.Drawing.Point(171, 104);
+            this.tbFanRPM.Multiline = true;
+            this.tbFanRPM.Name = "tbFanRPM";
+            this.tbFanRPM.ReadOnly = true;
+            this.tbFanRPM.Size = new System.Drawing.Size(47, 31);
+            this.tbFanRPM.TabIndex = 1;
+            // 
+            // rtbFanRPM
+            // 
+            this.rtbFanRPM.Location = new System.Drawing.Point(6, 44);
+            this.rtbFanRPM.Name = "rtbFanRPM";
+            this.rtbFanRPM.ReadOnly = true;
+            this.rtbFanRPM.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.rtbFanRPM.Size = new System.Drawing.Size(129, 91);
+            this.rtbFanRPM.TabIndex = 0;
+            this.rtbFanRPM.Text = "";
+            this.rtbFanRPM.TextChanged += new System.EventHandler(this.rtbFanRPM_TextChanged);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -297,6 +356,9 @@ namespace Fan_Control_System
             this.gbUART.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,6 +388,11 @@ namespace Fan_Control_System
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.RichTextBox rtbFanRPM;
+        private System.Windows.Forms.TextBox tbFanRPM;
     }
 }
 

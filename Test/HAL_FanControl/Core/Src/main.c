@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stdio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -26,6 +27,7 @@
 #include "spi.h"
 #include "Timer.h"
 #include "math.h"
+#include "stdlib.h"
 
 #define ENCODER_PPR 30
 
@@ -38,7 +40,8 @@ uint16_t ms_count = 0;
 int16_t duty_cycle = 100;
 float current_error;
 float control_signal;
-
+uint8_t* fanRPMData;
+char rpm_buffer[6]; // Adjust the size based on your integer size
 
 float a = -0.52;
 float b = 197.43;
@@ -62,6 +65,8 @@ float c = -7992;
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart2_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -70,6 +75,8 @@ UART_HandleTypeDef huart1;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
+static void MX_USART2_UART_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -77,19 +84,24 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t rx_data = 50;
+uint8_t rx_data = 60;
 
 
 void TIM1_UP_IRQHandler(){
 	if(TIM1->SR & 0x1){  //Check if interrupt flag is set
 		ms_count += 1;
-		if(ms_count >= 200){
+		if(ms_count % 200 == 0){
 			position = counterVal / 4;  //Get current position of encoder
 			if (position >= old_position){
 				encoderPPS = (position - old_position) * 5;  
 			}
 			currentFanRPM = (encoderPPS * 60) / ENCODER_PPR;
 			old_position = position;
+		}
+		if(ms_count >= 1000){
+    // Convert integer to string
+			snprintf(rpm_buffer, sizeof(rpm_buffer), "%d\n", currentFanRPM);
+			HAL_UART_Transmit(&huart2, (uint8_t*)rpm_buffer, sizeof(rpm_buffer), 1000);  			
 			ms_count = 0;
 		}
 		TIM1->SR &= ~1;  //Reset interrupt flag
@@ -123,13 +135,30 @@ void Set_FanSpeed(uint16_t DesiredFanRPM){
 	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_3);
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	HAL_UART_Receive_IT(&huart1, &rx_data, 1);
-}
-
 void Set_DutyCycle(uint8_t DutyCycle){
 	TIM_SetCCRxReg(TIM3,DutyCycle, TIM_Channel_3);
 }
+
+
+uint8_t* ToIntArray(uint16_t intData){
+	uint8_t* res = malloc(sizeof(uint8_t) * 4);
+	int divFactor = 1000;
+	
+	for (int count =0; count < 4; count++){
+		res[count]= intData / divFactor;
+		intData %= divFactor;
+		divFactor /= 10;
+	} 
+	return res;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	HAL_UART_Receive_IT(&huart1, &rx_data, 1);
+} 
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
+	HAL_UART_Transmit_IT(&huart2, fanRPMData, 4);
+} 
 /* USER CODE END 0 */
 
 /**
@@ -160,6 +189,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 	
@@ -177,7 +208,9 @@ int main(void)
 	TIM_EncoderStart(TIM4);
 	
 	HAL_UART_Receive_IT(&huart1, &rx_data, 1);
+	//HAL_UART_Transmit_IT(&huart2, fanRPMData, 4);  
 	
+	uint8_t data[] = "Hello World\n";
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -189,6 +222,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		counterVal = TIM4->CNT; //Get current counter value from timer 3
 		Set_DutyCycle(rx_data);
+
 		HAL_Delay(100);
   }
   /* USER CODE END 3 */
@@ -263,6 +297,55 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 9600;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 
 }
 
