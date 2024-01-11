@@ -1,7 +1,7 @@
 #ifndef __GPIO_H
 #define	__GPIO_H
 
-#include "main.h"
+#include "stm32f10x.h"
 #include "stdbool.h"
 
 //GPIO Port 

@@ -37,11 +37,13 @@ uint16_t old_position = 0;
 uint16_t encoderPPS = 0;
 uint16_t currentFanRPM = 0;
 uint16_t ms_count = 0;
-int16_t duty_cycle = 100;
-float current_error;
+uint8_t rx_data = 65;
+
+uint8_t temperature_data = 25;
+
 float control_signal;
 uint8_t* fanRPMData;
-char rpm_buffer[6]; // Adjust the size based on your integer size
+char rpm_buffer[9]; // Adjust the size based on your integer size
 
 float a = -0.52;
 float b = 197.43;
@@ -84,12 +86,13 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t rx_data = 60;
 
 
 void TIM1_UP_IRQHandler(){
 	if(TIM1->SR & 0x1){  //Check if interrupt flag is set
 		ms_count += 1;
+		
+		/*Calculate RPM every 200ms*/
 		if(ms_count % 200 == 0){
 			position = counterVal / 4;  //Get current position of encoder
 			if (position >= old_position){
@@ -98,9 +101,11 @@ void TIM1_UP_IRQHandler(){
 			currentFanRPM = (encoderPPS * 60) / ENCODER_PPR;
 			old_position = position;
 		}
-		if(ms_count >= 1000){
+		
+		/*Send RPM and Temperature data every 400ms*/
+		if(ms_count >= 400){  
     // Convert integer to string
-			snprintf(rpm_buffer, sizeof(rpm_buffer), "%d\n", currentFanRPM);
+			snprintf(rpm_buffer, sizeof(rpm_buffer), "%d %d\n", currentFanRPM, temperature_data);
 			HAL_UART_Transmit(&huart2, (uint8_t*)rpm_buffer, sizeof(rpm_buffer), 1000);  			
 			ms_count = 0;
 		}

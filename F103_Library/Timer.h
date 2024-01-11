@@ -1,7 +1,7 @@
 #ifndef __Timer_H
 #define __Timer_H
 
-#include "main.h"
+#include "stm32f10x.h"
 
 #define     __O     volatile             /*!< Defines 'write only' permissions */
 #define     __IO    volatile             /*!< Defines 'read / write' permissions */

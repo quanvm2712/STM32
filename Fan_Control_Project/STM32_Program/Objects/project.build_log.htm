@@ -22,51 +22,23 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\STM32_Program\project.uvprojx
-Project File Date:  01/09/2024
+Project File Date:  01/11/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Rebuild target 'Target 1'
-../../F103_Library/spi.c(1): warning: In file included from...
-../../F103_Library/spi.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
-compiling spi.c...
-../../F103_Library/delay.c(1): warning: In file included from...
-../../F103_Library/delay.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
-compiling delay.c...
-../../Hardware_Library/MAX7219.c(1): warning: In file included from...
-../../Hardware_Library/MAX7219.h(5): warning: In file included from...
-../../F103_Library\gpio.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
-compiling MAX7219.c...
-../../F103_Library/gpio.c(1): warning: In file included from...
-../../F103_Library/gpio.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
 compiling gpio.c...
-../../F103_Library/Timer.c(1): warning: In file included from...
-../../F103_Library/Timer.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
-compiling Timer.c...
-assembling startup_stm32f10x_md.s...
-main.c(2): warning: In file included from...
-../../F103_Library\delay.h(4): error: 'main.h' file not found
-#include "main.h"
-         ^~~~~~~~
-1 error generated.
-compiling main.c...
+compiling delay.c...
 compiling system_stm32f10x.c...
-".\Objects\project.axf" - 6 Error(s), 0 Warning(s).
+assembling startup_stm32f10x_md.s...
+compiling spi.c...
+compiling MAX7219.c...
+compiling main.c...
+compiling Timer.c...
+linking...
+Program Size: Code=13348 RO-data=412 RW-data=12 ZI-data=1656  
+FromELF: creating hex file...
+".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -93,12 +65,11 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:6.0.0
 
    * Component: Keil::Device:Startup:1.0.0
-      Include file:  RTE_Driver/Config/RTE_Device.h
-      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
       Source file:   Device/Source/ARM/STM32F1xx_OPT.s
       Source file:   Device/Source/system_stm32f10x.c
-Target not created.
-Build Time Elapsed:  00:00:00
+      Include file:  RTE_Driver/Config/RTE_Device.h
+      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

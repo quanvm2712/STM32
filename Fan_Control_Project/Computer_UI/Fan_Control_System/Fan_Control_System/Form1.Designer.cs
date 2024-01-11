@@ -53,13 +53,16 @@ namespace Fan_Control_System
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.tbTemperature = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tbFanRPM = new System.Windows.Forms.TextBox();
-            this.rtbFanRPM = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.gbUART.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -294,6 +297,8 @@ namespace Fan_Control_System
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label9);
+            this.groupBox4.Controls.Add(this.tbTemperature);
             this.groupBox4.Location = new System.Drawing.Point(310, 38);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(259, 184);
@@ -301,10 +306,21 @@ namespace Fan_Control_System
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Temperature monitor";
             // 
+            // tbTemperature
+            // 
+            this.tbTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTemperature.Location = new System.Drawing.Point(80, 126);
+            this.tbTemperature.Multiline = true;
+            this.tbTemperature.Name = "tbTemperature";
+            this.tbTemperature.ReadOnly = true;
+            this.tbTemperature.Size = new System.Drawing.Size(99, 31);
+            this.tbTemperature.TabIndex = 2;
+            this.tbTemperature.Text = "0";
+            // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.tbFanRPM);
-            this.groupBox3.Controls.Add(this.rtbFanRPM);
             this.groupBox3.Location = new System.Drawing.Point(15, 38);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(260, 184);
@@ -314,29 +330,39 @@ namespace Fan_Control_System
             // 
             // tbFanRPM
             // 
-            this.tbFanRPM.Location = new System.Drawing.Point(171, 104);
+            this.tbFanRPM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbFanRPM.Location = new System.Drawing.Point(81, 126);
             this.tbFanRPM.Multiline = true;
             this.tbFanRPM.Name = "tbFanRPM";
             this.tbFanRPM.ReadOnly = true;
-            this.tbFanRPM.Size = new System.Drawing.Size(47, 31);
+            this.tbFanRPM.Size = new System.Drawing.Size(99, 31);
             this.tbFanRPM.TabIndex = 1;
-            // 
-            // rtbFanRPM
-            // 
-            this.rtbFanRPM.Location = new System.Drawing.Point(6, 44);
-            this.rtbFanRPM.Name = "rtbFanRPM";
-            this.rtbFanRPM.ReadOnly = true;
-            this.rtbFanRPM.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtbFanRPM.Size = new System.Drawing.Size(129, 91);
-            this.rtbFanRPM.TabIndex = 0;
-            this.rtbFanRPM.Text = "";
-            this.rtbFanRPM.TextChanged += new System.EventHandler(this.rtbFanRPM_TextChanged);
+            this.tbFanRPM.Text = "0";
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(194, 135);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 16);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "RPM";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(185, 135);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(24, 16);
+            this.label9.TabIndex = 3;
+            this.label9.Text = "*C";
             // 
             // Form1
             // 
@@ -357,6 +383,8 @@ namespace Fan_Control_System
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
@@ -391,8 +419,10 @@ namespace Fan_Control_System
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.RichTextBox rtbFanRPM;
         private System.Windows.Forms.TextBox tbFanRPM;
+        private System.Windows.Forms.TextBox tbTemperature;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
 

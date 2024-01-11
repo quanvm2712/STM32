@@ -145,6 +145,11 @@ namespace Fan_Control_System
         int bytesToRead;
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (serialPort1.IsOpen)
+            {
+                dataIn = serialPort1.ReadExisting();
+                word += dataIn;
+            }
 
         }
 
@@ -154,30 +159,50 @@ namespace Fan_Control_System
             if (serialPort1.IsOpen)
             {
                 bytesToRead = serialPort1.BytesToRead;
-                dataIn = serialPort1.ReadExisting();
+                //dataIn = serialPort1.ReadExisting();
                 this.Invoke(new EventHandler(ShowData));
             }
 
         }
         string dataToDisplay;
-        string word = "HelloWorld";
+        string word;
+        int fanRpm, temperature;
+        string[] dataSegments;
+
         private void ShowData(object sender, EventArgs e)
         {
-            rtbFanRPM.Text += dataIn;
-
-            string[] dataSegments = dataIn.Split(new string[] { "\n\0" }, StringSplitOptions.RemoveEmptyEntries);
-
-            if(dataSegments.Length > 0)
+           
+            if(String.IsNullOrEmpty(word) == false)
             {
-                tbFanRPM.AppendText( dataSegments[0] + "\n");
+                dataSegments = word.Split(new string[] { "\0" }, StringSplitOptions.RemoveEmptyEntries);
+                if (dataSegments.Length >= 2) {
+                    string[] parts = dataSegments[1].Split(' ');
+                    // Convert the string values to integers
+                    if (int.TryParse(parts[0], out fanRpm) && int.TryParse(parts[1], out temperature))
+                    {
+                        Console.WriteLine("Fan RPM: " + fanRpm);
+                        Console.WriteLine("Temperature: " + temperature);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid format: Unable to parse fan RPM or temperature.");
+                    }
+                }
+                tbFanRPM.Text = fanRpm.ToString();
+                tbTemperature.Text = temperature.ToString();
+                word = string.Empty;
             }
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
 
         }
 
         private void rtbFanRPM_TextChanged(object sender, EventArgs e)
         {
-            rtbFanRPM.SelectionStart = rtbFanRPM.Text.Length;
-            rtbFanRPM.ScrollToCaret();
+
         }
     }
 }

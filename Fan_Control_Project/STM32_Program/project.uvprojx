@@ -420,6 +420,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\Hardware_Library\MAX7219.h</FilePath>
             </File>
+            <File>
+              <FileName>delay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\F103_Library\delay.h</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\F103_Library\gpio.h</FilePath>
+            </File>
+            <File>
+              <FileName>spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\F103_Library\spi.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\F103_Library\Timer.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -1,7 +1,7 @@
 #ifndef	__DELAY_H
 #define __DELAY_H
 
-#include "main.h"
+#include "stm32f10x.h"
 
 void TIM2_Config(void);
 void delay_us(uint16_t time_us);

@@ -102,7 +102,7 @@ int main(void){
 	
 	while(1){	
 		counterVal = TIM4->CNT; //Get current counter value from timer 3
-		Set_FanSpeed(3000);		
+		Set_FanSpeed(5000);		
 		
 		//MAX7219_PrintInt(currentFanRPM, 4, DIGIT_POSITION_3);
 		delay_ms(100);
