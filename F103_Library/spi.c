@@ -78,7 +78,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 	//Init CS IO
 	if(SPIx == SPI1){
 		GPIO_Init(GPIO_A, 4, GPIO_OUTPUT);
-		GPIO_PullUpDown(GPIO_A, 4, GPIO_PULLUP);
+		GPIO_PullUpDown(GPIO_A, 4, GPIO_PIN_PULLUP);
 		
 		//Init SPI1 IO
 		GPIO_Init(GPIO_A, 5, AFIO_OUTPUT);  //CLK
@@ -87,7 +87,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 	}
 	else if(SPIx==SPI2){
 		GPIO_Init(GPIO_B, 12, GPIO_OUTPUT);
-		GPIO_PullUpDown(GPIO_B, 12, GPIO_PULLUP);	
+		GPIO_PullUpDown(GPIO_B, 12, GPIO_PIN_PULLUP);	
 
 		//Init SPI1 IO
 		GPIO_Init(GPIO_B, 13, AFIO_OUTPUT);  //CLK

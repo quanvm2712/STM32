@@ -1,0 +1,10 @@
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\bin\Debug\Fan_Control_System.exe.config
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\bin\Debug\Fan_Control_System.exe
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\bin\Debug\Fan_Control_System.pdb
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.csproj.AssemblyReference.cache
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.Form1.resources
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.Properties.Resources.resources
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.csproj.GenerateResource.cache
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.csproj.CoreCompileInputs.cache
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.exe
+C:\Quan\Learning\Embedded\STM32\Fan_Control_Project\Computer_UI\Fan_Control_System\Fan_Control_System\obj\Debug\Fan_Control_System.pdb
