@@ -1,0 +1,9 @@
+diff a/I2C_Driver/main.c b/I2C_Driver/main.c	(rejected hunks)
+@@ -156,6 +156,7 @@
+ +    //AHT20_WaitAfterPowerOn();
+ +=======
+      AHT20_WaitAfterPowerOn();
+++>>>>>>> f73638d (first commit)
+  
+      /* Step 2: Trigger measurement */
+  		//AHT20_TriggerMeasurement();
