@@ -1,10 +1,10 @@
-#include "i2c_drive.h"
 
-void I2C_init(char i2c, unsigned short speed_mode)
+#include "i2c_drive.h"
+#include "stm32f10x.h"                 
+
+void I2C_init()
 {
-	RCC->APB2ENR |= 1;/* enable clock for port B */
-	if (i2c == 1)
-	{
+		RCC->APB2ENR |= 1;/* enable clock for port B */
 		RCC->APB1ENR |= 0x200000; /* enable clock for I2C1 */
 		/* Configure GPIO */
 		init_GP(PB, 6, OUT50, O_AF_OD);
@@ -17,129 +17,91 @@ void I2C_init(char i2c, unsigned short speed_mode)
 		I2C1->CCR = 40;
 		I2C1->TRISE = 9; /* ensures that the frequency of the SCL signal remains stable */
 		I2C1->CR1 |= 1;
-	}
-	else if(i2c == 2)
-	{
-		RCC->APB1ENR |= 0x400000;
-		
-		init_GP(PB, 10, OUT50, O_AF_OD);
-		init_GP(PB, 11, OUT50, O_AF_OD);
-		
-		I2C2->CR1 |= 0x8000;
-		I2C2->CR1 &= ~0x8000;
-		
-		I2C2->CR2 = 0x8;
-		I2C2->CCR = speed_mode;
-		I2C2->TRISE = 0x9;
-		I2C2->CR1 |= 1;
-	}
 }
 /* start step */
-void I2C_start(char i2c) 
+void I2C_start(uint8_t address, uint8_t ReadWriteMode) 
 {
-	uint16_t status;
-	if (i2c == 1)
-	{
+		volatile uint32_t tmp;
+		// Generate Start condition
 		I2C1->CR1 |= 0x100; /* turn on bit 8 start signal */
-		//while ((I2C1->SR1 & (1 << 0)));/*wait bit 1 of SR1 = 1, if =1 it means start signal accepted*/
-		//Read SR1 reg and write data to DR reg to clear SB flag
-		status = I2C1->SR1;
-		I2C1->DR = (0x38) << 1;
-		while(I2C1->SR1 & (1 << 0));
 		
- 	}
-	else if (i2c == 2)
-	{
-		I2C2->CR1 |= 0x100;
-		while ((I2C2->SR1 & 1) == 0);
-	}
+		while ((I2C1->SR1 & 1) == 0);/*wait SB bit = 1, if =1 it means start signal accepted*/
+		I2C1->DR = ((address) << 1) | ReadWriteMode;
+		while(I2C1->SR1 & (1 << 0)); //Wait to reset SB bit
+		while(!(I2C1->SR1 & (1 << 1)));//Wait ADDR bit to set
+		
+		tmp = I2C1->SR1;/* read value of status SR1 and SR2 for clear flags or read ADDR event details*/
+		tmp = I2C1->SR2;		
+		while(I2C1->SR1 & (1 << 1));//Wait ADDR bit to reset
 }
 
-/* sending address and Read or Write */
-void I2C_add(char i2c, char address, char RW)
+void I2C_data(uint8_t *data, uint8_t dataSize)
 {
-	volatile int tmp;
-	if (i2c == 1)
-	{
-		I2C1->DR = (address | RW);
-		while ((I2C1->SR1 & 2) == 0);
-		while ((I2C1->SR1 & 2))
-		{
-			tmp = I2C1->SR1;
-			tmp = I2C1->SR2;
-			if ((I2C1->SR1 & 2) == 0)
-			{
-				break;
+			uint8_t count = 0;
+			while (count < dataSize){
+					while ((I2C1->SR1 & 0x80) == 0); //wait for TxE, indicating data register is empty and ready to receive new data
+					I2C1->DR = data[count]; // begin the process of transmitting data
+					count++;
+					while ((I2C1->SR1 & 0x80) == 0);  //Wait until buffer is empty	
 			}
-		}
-	}
-	else if (i2c == 2)
-	{
-		I2C2->DR = (address | RW); /*assign address of device and select opt read or write */
-		while ((I2C2->SR1 & 2) == 0); /* busy wait until bit ADDR = 1, it means ADDR has been processed, ACK is received from device*/
-		while ((I2C2->SR1 & 2))
-		{
-			tmp = I2C2->SR1;/* read value of status SR1 and SR2 for clear flags or read ADDR event details*/
-			tmp = I2C2->SR2;
-			if ((I2C2->SR1 & 2) == 0) /* when bit ADDR = 0, ADDR event has been processed */
-			{
-				break;
-			}
-		}
-	}
-	
+			I2C_stop();
+}
+void I2C_write(uint8_t address, uint8_t *data, uint8_t dataSize)
+{
+
+	I2C_start(address, I2C_WRITE);
+	I2C_data(data, dataSize);
+}
+
+void I2C_stop(void) {
+   // Generate Stop condition
+   I2C1->CR1 |= (1 << 9); // Set the 9th bit (STOP bit) in CR1 register
+	 // Wait for stop condition to be executed
+   while (I2C1->CR1 & (1 << 9)); // Wait until the STOP bit is cleared
 }
 
 
-char I2C_data(char i2c, char data)
-{
-    char receivedData = 0;
-
-    if (i2c == 1)
-    {
-        while ((I2C1->SR1 & 0x80) == 0); /* wait for bit 7 = 1, indicating data register is empty and ready to receive new data */
-        I2C1->DR = data; /* begin the process of transmitting data */
-        while ((I2C1->SR1 & 0x80) == 0);
-        receivedData = (char)I2C1->DR; /* read the received data, if necessary */
-    }
-    else if (i2c == 2)
-    {
-        while ((I2C2->SR1 & 0x80) == 0);
-        I2C2->DR = data;
-        while ((I2C2->SR1 & 0x80) == 0);
-        receivedData = (char)I2C2->DR; /* read the received data, if necessary */
+void I2C_ReadData(uint8_t *data, uint8_t ack) {
+    if (ack) {
+        I2C1->CR1 |= (1 << 10);
+    } else {
+        I2C1->CR1 &= ~(1 << 10);
     }
 
-    return receivedData;
+    while ((I2C1->SR1 & (1 << 6)) == 0); // wait until RxNe set
+    *data = I2C1->DR;
 }
-
-
-void I2C_stop(char i2c)
+//while ((I2C1->SR1 & (1 << 2)) == 0) BTF
+void I2C_read(uint8_t address, uint8_t *data, uint8_t dataSize) {
+			I2C_start(address, 1);
+			uint8_t i;
+			for (i = 0; i < dataSize; ++i) {
+        if (i == dataSize - 3) {
+					  while ((I2C1->SR1 & (1 << 6)) == 0); // wait until RxNe set
+        } else if (i == dataSize - 2) {
+						while ((I2C1->SR1 & (1 << 2)) == 0){}; // wait until BTF set
+						I2C1->CR1 &= ~(1 << 10);
+						I2C_ReadData(&data[dataSize - 3], 0);
+            I2C_stop(); // STOP = 1
+        } else if (i == dataSize - 1)
+				{
+            I2C_ReadData(&data[dataSize - 2], 0);
+						while ((I2C1->SR1 & (1 << 6)) == 0);
+						I2C_ReadData(&data[i], 0);
+				}
+				else {
+            I2C_ReadData(&data[i], 1);
+        }
+    }
+}
+void I2C_read1(uint8_t address, uint8_t *data, uint8_t dataSize)
 {
-	volatile int tmp;
-	if (i2c == 1)
-	{
-		tmp = I2C1->SR1;
-		tmp = I2C1->SR2;
-		I2C1->CR1 |= 0x200;
-	}
-	else if (i2c == 2)
-	{
-		tmp = I2C2->SR1;
-		tmp = I2C2->SR2;
-		I2C2->CR1 |= 0x200;
-	}
+	I2C_start(address, 1);
+	I2C1->CR1 &= ~(1 << 10); //ack = 0;
+	I2C_stop();
+	while ((I2C1->SR1 & (1 << 6)) == 0){}; // wait until RxNe set
+  *data = I2C1->DR;
 }
 
-void I2C_write(char i2c, char address, char data[])
-{
-	int i = 0;
-	I2C_start(i2c);
-	I2C_add(i2c, address, 0);
-	while (data[i])
-	{
-		I2C_data(i2c, data[i]);
-		i++;
-	}
-	I2C_stop(i2c);
-}
+
+
