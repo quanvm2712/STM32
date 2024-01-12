@@ -50,7 +50,6 @@ namespace Fan_Control_System
             this.button2 = new System.Windows.Forms.Button();
             this.tbDutyCycle = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tbTemperature = new System.Windows.Forms.TextBox();
@@ -103,7 +102,7 @@ namespace Fan_Control_System
             this.lbConnectStatus.Name = "lbConnectStatus";
             this.lbConnectStatus.Size = new System.Drawing.Size(232, 40);
             this.lbConnectStatus.TabIndex = 10;
-            this.lbConnectStatus.Text = "Disconnected";
+            this.lbConnectStatus.Text = "Closed";
             this.lbConnectStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btConnect
@@ -113,7 +112,7 @@ namespace Fan_Control_System
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(122, 45);
             this.btConnect.TabIndex = 9;
-            this.btConnect.Text = "Connect";
+            this.btConnect.Text = "Open";
             this.btConnect.UseVisualStyleBackColor = false;
             this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
             // 
@@ -124,7 +123,7 @@ namespace Fan_Control_System
             this.btDisconnect.Name = "btDisconnect";
             this.btDisconnect.Size = new System.Drawing.Size(104, 45);
             this.btDisconnect.TabIndex = 8;
-            this.btDisconnect.Text = "Disconnect";
+            this.btDisconnect.Text = "Close";
             this.btDisconnect.UseVisualStyleBackColor = false;
             this.btDisconnect.Click += new System.EventHandler(this.btDisconnect_Click);
             // 
@@ -275,15 +274,6 @@ namespace Fan_Control_System
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.groupBox4);
@@ -368,13 +358,15 @@ namespace Fan_Control_System
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(953, 421);
+            this.ClientSize = new System.Drawing.Size(991, 435);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.gbUART);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -414,7 +406,6 @@ namespace Fan_Control_System
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbDutyCycle;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;

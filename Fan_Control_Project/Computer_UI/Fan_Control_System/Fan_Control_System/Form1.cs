@@ -49,7 +49,7 @@ namespace Fan_Control_System
             string[] stopBits = { "None","One", "Two" };
             cbStopBit.Items.AddRange(stopBits);
 
-
+            
             //
         }
 
@@ -115,12 +115,27 @@ namespace Fan_Control_System
             int number = 0;
             if (tbDutyCycle.Text != string.Empty)
             {
-                number = Int32.Parse(tbDutyCycle.Text);
+                try
+                {
+                    number = Int32.Parse(tbDutyCycle.Text);
+                }
+                catch(Exception err)
+                {
+                    MessageBox.Show(err.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
             }
             byte[] buffer = new byte[] { Convert.ToByte(number) };
 
-            serialPort1.Write(buffer, 0, 1);
-            tbDutyCycle.Text = String.Empty;
+            try
+            {
+                serialPort1.Write(buffer, 0, 1);
+                tbDutyCycle.Text = String.Empty;
+            }
+            catch(Exception err)
+            {
+                MessageBox.Show(err.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Enter(object sender, KeyEventArgs e)
