@@ -7,7 +7,9 @@
 void AHT20_Init();
 void AHT20_GetData(uint8_t *sensor_data);
 
-uint8_t sensor_data[6];
+uint8_t data[6];
+float actualTemperature;
+float actualHumidity;
 
 void AHT20_Init(){
 	DelayMs(40);
@@ -55,12 +57,14 @@ int main(void)
 	
 	uint8_t status;
 	
-	//uint8_t sensor_data[6];
-	//AHT20_GetData(sensor_data);
 	
 	while (1)
 	{
-		AHT20_GetData(sensor_data);
+		AHT20_GetData(data);
+		uint32_t temperature = ((data[1] << 16) | (data[2] << 8) | data[3]) >> 4;
+		uint32_t humidity = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5];
 		
+		actualTemperature = (temperature * 200.0 / 1048576.0) - 50.0;
+    actualHumidity = (humidity * 100.0 / 1048576.0);
 	}
 }
