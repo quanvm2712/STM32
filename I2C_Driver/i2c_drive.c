@@ -2,13 +2,23 @@
 #include "i2c_drive.h"
 #include "stm32f10x.h"                 
 
-void I2C_init()
+void I2C_init(uint8_t isRemapEnabled)
 {
 		RCC->APB2ENR |= 1;/* enable clock for port B */
 		RCC->APB1ENR |= 0x200000; /* enable clock for I2C1 */
+	
 		/* Configure GPIO */
-		init_GP(PB, 6, OUT50, O_AF_OD);
-		init_GP(PB, 7, OUT50, O_AF_OD);
+		if(isRemapEnabled){
+			I2C1_Enable_IO_Remap(I2C1_REMAP_ENABLE);
+			init_GP(PB, 8, OUT50, O_AF_OD);
+			init_GP(PB, 9, OUT50, O_AF_OD);			
+		}
+		else{
+			I2C1_Enable_IO_Remap(I2C1_REMAP_DISABLE);
+			init_GP(PB, 6, OUT50, O_AF_OD);
+			init_GP(PB, 7, OUT50, O_AF_OD);			
+		}
+
 		
 		I2C1->CR1 |= 0x8000; /*Reset I2C1*/
 		I2C1->CR1 &= ~0x8000; /* turn off I2C1 to configure */
@@ -103,5 +113,10 @@ void I2C_read1(uint8_t address, uint8_t *data, uint8_t dataSize)
   *data = I2C1->DR;
 }
 
-
+void I2C1_Enable_IO_Remap(uint8_t isEnabled){
+	RCC->APB2ENR |= (1 << 0); //Enable clock for AFIO 
+	
+	AFIO->MAPR &= ~(1 << 1);	//Reset I2C1 Remap bit
+	AFIO->MAPR |= (isEnabled << 1);
+}
 
