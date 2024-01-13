@@ -3,6 +3,7 @@
 #include "i2c_drive.h"
 #include "systick_time.h"
 
+uint8_t sensor_data[6];
 
 void AHT20_Init();
 void AHT20_GetData(uint8_t *sensor_data);
@@ -47,7 +48,7 @@ void AHT20_GetData(uint8_t *sensor_data){
 int main(void)
 {
 	systick_init();
-	I2C_init();
+	I2C_init(I2C1_REMAP_ENABLE);
 	AHT20_Init();
 	
 	
@@ -58,8 +59,6 @@ int main(void)
 	
 	while (1)
 	{
-		uint8_t sensor_data[6];
 		AHT20_GetData(sensor_data);
-		
 	}
 }
