@@ -28,7 +28,11 @@
 #include "Timer.h"
 #include "math.h"
 #include "stdlib.h"
+#include "i2c_drive.h"
+#include "gp_drive.h"
+#include "systick_time.h"
 
+/*Motor control parameters*/
 #define ENCODER_PPR 30
 
 int counterVal = 0;
@@ -48,6 +52,14 @@ char rpm_buffer[9]; // Adjust the size based on your integer size
 float a = -0.52;
 float b = 197.43;
 float c = -7992;
+
+
+/*AHT20 variables*/
+uint8_t data[6];
+float actualTemperature;
+float actualHumidity;
+uint8_t AHT20_Data[2];
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,7 +117,7 @@ void TIM1_UP_IRQHandler(){
 		/*Send RPM and Temperature data every 400ms*/
 		if(ms_count >= 400){  
     // Convert integer to string
-			snprintf(rpm_buffer, sizeof(rpm_buffer), "%d %d\n", currentFanRPM, temperature_data);
+			snprintf(rpm_buffer, sizeof(rpm_buffer), "%d %d\n", currentFanRPM, AHT20_Data[0]);
 			HAL_UART_Transmit(&huart2, (uint8_t*)rpm_buffer, sizeof(rpm_buffer), 1000);  			
 			ms_count = 0;
 		}
@@ -145,18 +157,6 @@ void Set_DutyCycle(uint8_t DutyCycle){
 }
 
 
-uint8_t* ToIntArray(uint16_t intData){
-	uint8_t* res = malloc(sizeof(uint8_t) * 4);
-	int divFactor = 1000;
-	
-	for (int count =0; count < 4; count++){
-		res[count]= intData / divFactor;
-		intData %= divFactor;
-		divFactor /= 10;
-	} 
-	return res;
-}
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	HAL_UART_Receive_IT(&huart1, &rx_data, 1);
 } 
@@ -164,6 +164,58 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
 	HAL_UART_Transmit_IT(&huart2, fanRPMData, 4);
 } 
+
+
+
+void AHT20_Init(){
+	DelayMs(40);
+	//Send Init command to AHT20
+	
+	
+	uint8_t status;
+	I2C_read1(0x38, &status, 1);
+	
+	if (!(status & (1 << 3)))
+	{
+		uint8_t init_command[] = {0xBE, 0x08, 0x00};
+		I2C_write(0x38, init_command, 3);
+		DelayMs(10);
+	}
+
+}
+
+void AHT20_GetData(uint8_t *sensor_data){
+	//Send trigger measurement command
+
+	uint8_t trigger_command[] = {0xAC, 0x38, 0x00};
+	I2C_write(0x38, trigger_command, 3);
+	//
+	DelayMs(80);
+
+	
+	//Wait for measurement to be completed
+	uint8_t status;
+	do 
+	{
+		I2C_read1(0x38, &status, 1);
+	}while(status & (1 << 7));
+
+	//get data
+	I2C_read(0x38,sensor_data, 6);
+}
+
+
+void AHT20_GetValue(uint8_t* value){
+	AHT20_GetData(data);
+	uint32_t humidity = ((data[1] << 16) | (data[2] << 8) | data[3]) >> 4;
+	uint32_t temperature = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5];
+	
+	actualTemperature = (temperature * 200.0 / 1048576.0) - 50.0;
+	actualHumidity = (humidity * 100.0 / 1048576.0);
+
+	value[0] = (uint8_t) actualTemperature;
+	value [1] = (uint8_t) actualHumidity;
+}
 /* USER CODE END 0 */
 
 /**
@@ -213,9 +265,11 @@ int main(void)
 	TIM_EncoderStart(TIM4);
 	
 	HAL_UART_Receive_IT(&huart1, &rx_data, 1);
-	//HAL_UART_Transmit_IT(&huart2, fanRPMData, 4);  
+
+	//Init I2C and AHT20
+	I2C_init(I2C1_REMAP_ENABLE);
+	AHT20_Init();
 	
-	uint8_t data[] = "Hello World\n";
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -228,7 +282,8 @@ int main(void)
 		counterVal = TIM4->CNT; //Get current counter value from timer 3
 		Set_DutyCycle(rx_data);
 
-		HAL_Delay(100);
+		AHT20_GetValue(AHT20_Data);
+		HAL_Delay(20);
   }
   /* USER CODE END 3 */
 }
