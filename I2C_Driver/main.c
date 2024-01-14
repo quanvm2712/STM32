@@ -61,8 +61,8 @@ int main(void)
 	while (1)
 	{
 		AHT20_GetData(data);
-		uint32_t temperature = ((data[1] << 16) | (data[2] << 8) | data[3]) >> 4;
-		uint32_t humidity = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5];
+		uint32_t humidity = ((data[1] << 16) | (data[2] << 8) | data[3]) >> 4;
+		uint32_t temperature = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5];
 		
 		actualTemperature = (temperature * 200.0 / 1048576.0) - 50.0;
     actualHumidity = (humidity * 100.0 / 1048576.0);
