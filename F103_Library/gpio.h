@@ -19,8 +19,8 @@
 #define AFIO_OUTPUT		2
 
 //PULL UP/DOWN
-#define	GPIO_PIN_PULLUP		0
-#define GPIO_PIN_PULLDOWN	1
+#define	GPIO_PIN_PULLDOWN		0
+#define GPIO_PIN_PULLUP	1
 
 
 
@@ -30,5 +30,6 @@ void GPIO_Set(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Reset(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Toggle(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode);
+uint8_t GPIO_ReadPin(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 
 #endif //__GPIO_H

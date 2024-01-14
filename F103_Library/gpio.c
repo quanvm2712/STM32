@@ -255,3 +255,20 @@ void GPIO_PullUpDown(uint8_t GPIO_Port,uint8_t GPIO_Pin, bool pullMode){
 		}
 }
 
+uint8_t GPIO_ReadPin(uint8_t GPIO_Port, uint8_t GPIO_Pin){
+		switch(GPIO_Port){
+			case GPIO_A:
+				return GPIOA->IDR & (1 << GPIO_Pin);
+				break;
+			
+			case GPIO_B:
+				return GPIOB->IDR & (1 << GPIO_Pin);			
+				break;			
+
+			case GPIO_C:
+				return GPIOC->IDR & (1 << GPIO_Pin);		
+				break;				
+		}	
+		
+		return 0;
+}
