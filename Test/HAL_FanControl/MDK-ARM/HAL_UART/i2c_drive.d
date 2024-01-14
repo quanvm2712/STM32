@@ -1,5 +1,5 @@
-hal_uart/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
-  ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
+hal_uart/i2c_drive.o: F103_Library\i2c_drive.c F103_Library\i2c_drive.h \
+  ..\Core\Inc\main.h ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
   ..\Core\Inc\stm32f1xx_hal_conf.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_def.h \
@@ -26,10 +26,4 @@ hal_uart/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_flash_ex.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pwr.h \
   ..\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h F103_Library\delay.h \
-  F103_Library\gpio.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  F103_Library\spi.h F103_Library\Timer.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  F103_Library\i2c_drive.h F103_Library\gp_drive.h \
-  F103_Library\systick_time.h
+  F103_Library\gp_drive.h
