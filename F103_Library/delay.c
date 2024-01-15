@@ -17,6 +17,7 @@ void TIM2_Config(void){
 
 
 void delay_us(uint16_t time_us){
+	TIM2_Config();
 	TIM2->CNT = 0; //reset counter value
 	while (TIM2->CNT < time_us);  //wait until counter value exceed time_us
 }
