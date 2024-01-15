@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\Objects\project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Jan  7 22:12:37 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Tue Jan 16 05:18:18 2024
 <BR><P>
 <H3>Maximum Stack Usage =        116 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+__rt_entry_main &rArr; main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 <P>
 <H3>
 Functions with no stack information
@@ -207,7 +207,7 @@ Global Symbols
 
 <P><STRONG><a name="[40]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
 <BR><BR>[Stack]<UL><LI>Max Depth = 116 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -508,7 +508,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4b]"></a>MAX7219_Clean</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_Clean))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_Clean &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_Clean &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -516,7 +516,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4d]"></a>MAX7219_EmptyAllDigits</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_EmptyAllDigits))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -525,7 +525,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4e]"></a>MAX7219_Init</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_Init &rArr; MAX7219_SetDecodeMode &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = MAX7219_Init &rArr; MAX7219_SetDecodeMode &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SetDecodeMode
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SetScanLimit
@@ -536,7 +536,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4f]"></a>MAX7219_PowerOn</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, max7219.o(.text.MAX7219_PowerOn))
-<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = MAX7219_PowerOn &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = MAX7219_PowerOn &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -544,7 +544,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[53]"></a>MAX7219_PrintInt</STRONG> (Thumb, 224 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_PrintInt))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_EmptyAllDigits
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
@@ -553,7 +553,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[54]"></a>MAX7219_PrintString</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_PrintString))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_PrintString &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = MAX7219_PrintString &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_EmptyAllDigits
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
@@ -562,7 +562,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4c]"></a>MAX7219_SendData</STRONG> (Thumb, 70 bytes, Stack size 32 bytes, max7219.o(.text.MAX7219_SendData))
-<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Transmit
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Reset
@@ -579,7 +579,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[52]"></a>MAX7219_SetDecodeMode</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_SetDecodeMode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_SetDecodeMode &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_SetDecodeMode &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -587,7 +587,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[50]"></a>MAX7219_SetIntensity</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_SetIntensity))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_SetIntensity &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_SetIntensity &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -595,7 +595,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[51]"></a>MAX7219_SetScanLimit</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, max7219.o(.text.MAX7219_SetScanLimit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = MAX7219_SetScanLimit &rArr; MAX7219_SendData &rArr; SPI_Transmit
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MAX7219_SetScanLimit &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -605,7 +605,7 @@ Global Symbols
 <P><STRONG><a name="[62]"></a>SPI_Enable</STRONG> (Thumb, 18 bytes, Stack size 4 bytes, spi.o(.text.SPI_Enable))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = SPI_Enable
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
+<BR>[Called By]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Transmit
 </UL>
 
 <P><STRONG><a name="[5b]"></a>SPI_EnableClock</STRONG> (Thumb, 78 bytes, Stack size 4 bytes, spi.o(.text.SPI_EnableClock))
@@ -614,8 +614,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
 </UL>
 
-<P><STRONG><a name="[58]"></a>SPI_IO_Init</STRONG> (Thumb, 152 bytes, Stack size 40 bytes, spi.o(.text.SPI_IO_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+<P><STRONG><a name="[58]"></a>SPI_IO_Init</STRONG> (Thumb, 148 bytes, Stack size 32 bytes, spi.o(.text.SPI_IO_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PullUpDown
 <LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
@@ -623,13 +623,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
 </UL>
 
-<P><STRONG><a name="[5a]"></a>SPI_Init</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, spi.o(.text.SPI_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+<P><STRONG><a name="[5a]"></a>SPI_Init</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, spi.o(.text.SPI_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
 </UL>
 <BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_IO_Init
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetFrameFormat
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SoftwareSlaveSelect_Enable
-<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Enable
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetSourceClock
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetMasterSlave
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_SetClockPolarity
@@ -675,8 +674,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Init
 </UL>
 
-<P><STRONG><a name="[56]"></a>SPI_Transmit</STRONG> (Thumb, 136 bytes, Stack size 12 bytes, spi.o(.text.SPI_Transmit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = SPI_Transmit
+<P><STRONG><a name="[56]"></a>SPI_Transmit</STRONG> (Thumb, 144 bytes, Stack size 24 bytes, spi.o(.text.SPI_Transmit))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = SPI_Transmit &rArr; SPI_Enable
+</UL>
+<BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Enable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_SendData
 </UL>
@@ -691,25 +692,28 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md.o(.text)
 </UL>
 <P><STRONG><a name="[67]"></a>TIM2_Config</STRONG> (Thumb, 70 bytes, Stack size 0 bytes, delay.o(.text.TIM2_Config))
-<BR><BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR><BR>[Called By]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[65]"></a>delay_ms</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, delay.o(.text.delay_ms))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = delay_ms &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = delay_ms &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[66]"></a>delay_us</STRONG> (Thumb, 42 bytes, Stack size 4 bytes, delay.o(.text.delay_us))
-<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = delay_us
+<P><STRONG><a name="[66]"></a>delay_us</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, delay.o(.text.delay_us))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = delay_us
+</UL>
+<BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Config
 </UL>
 <BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
 
 <P><STRONG><a name="[41]"></a>main</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = main &rArr; SPI_Init &rArr; SPI_IO_Init &rArr; GPIO_Init &rArr; GPIO_EnableClock
+<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = main &rArr; MAX7219_PrintInt &rArr; MAX7219_EmptyAllDigits &rArr; MAX7219_SendData &rArr; SPI_Transmit &rArr; SPI_Enable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MAX7219_PrintInt
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms

@@ -65,7 +65,6 @@ void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode){
 	SPI_SetFrameFormat(SPIx, SPI_MSBFirst);
 	
 	SPI_IO_Init(SPIx);
-	SPI_Enable(SPIx);
 	
 }
 
@@ -97,6 +96,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 }
 
 void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
+	SPI_Enable(SPIx);
 	uint8_t count = 0;
 	while (count < dataSize){
 		while(!((SPIx->SR) & (1 << 1)));  //Wait until TX buffer is empty
@@ -110,4 +110,8 @@ void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
 	//  Clear the Overrun flag by reading DR and SR
 	uint8_t temp = SPI1->DR;
 	temp = SPI1->SR;		
+}
+
+void SPI_Transmit_DMA(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
+	
 }
