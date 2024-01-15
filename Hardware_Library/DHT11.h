@@ -11,5 +11,7 @@ typedef struct{
 
 
 void DHT11_SendStartSignal(DHT11_Instance DHT11);
-void DHT11_GetData(DHT11_Instance DHT11, uint8_t* data);
+void DHT11_GetSignal(DHT11_Instance DHT11, uint8_t* data);
+void DHT11_GetValue(DHT11_Instance DHT11, uint8_t* value);
+
 #endif	//__DHT11_H

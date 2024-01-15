@@ -4,18 +4,17 @@
 #include "DHT11.h"
 
 DHT11_Instance DHT11;
+uint8_t data[2];
 
 int main(void){
 	
 	DHT11.GPIO_Port = GPIO_A;
 	DHT11.GPIO_Pin = 3;
 	
-	//DHT11_SendStartSignal(DHT11);
-	
-	
-	uint8_t data;
-	DHT11_GetData(DHT11, &data);
-	
-	
+	while(1){
+		DHT11_GetValue(DHT11, data);
+		delay_ms(100);
+	}
+
 	return 0;
 }
