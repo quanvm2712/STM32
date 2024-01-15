@@ -25,6 +25,8 @@
 
 
 void GPIO_EnableClock(uint8_t GPIO_Port);
+
+//User function
 void GPIO_Init(uint8_t GPIO_Port, uint8_t GPIO_Pin, uint8_t mode);
 void GPIO_Set(uint8_t GPIO_Port, uint8_t GPIO_Pin);
 void GPIO_Reset(uint8_t GPIO_Port, uint8_t GPIO_Pin);

@@ -149,6 +149,7 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <Breakpoint/>
 =======
 <<<<<<< HEAD
@@ -190,10 +191,14 @@
       <Breakpoint/>
 >>>>>>> 11e3905 (add file)
 >>>>>>> 60f4187 (no message)
+=======
+      <Breakpoint/>
+>>>>>>> 7ae104b (Add IWDG control function, ready to be tested)
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
 <<<<<<< HEAD
           <ItemText>data</ItemText>
         </Ww>
@@ -208,12 +213,24 @@
           <ItemText>actualHumidity</ItemText>
 =======
           <ItemText>sensor_data</ItemText>
+=======
+          <ItemText>actualTemperature</ItemText>
+>>>>>>> 7ae104b (Add IWDG control function, ready to be tested)
         </Ww>
         <Ww>
-          <count>4</count>
+          <count>1</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>sensor_data</ItemText>
 >>>>>>> 60f4187 (no message)
+=======
+          <ItemText>actualHumidity</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>status</ItemText>
+>>>>>>> 7ae104b (Add IWDG control function, ready to be tested)
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

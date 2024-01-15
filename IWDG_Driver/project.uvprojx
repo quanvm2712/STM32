@@ -329,7 +329,7 @@
             <uC99>1</uC99>
             <uGnu>1</uGnu>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
+            <v6Lang>3</v6Lang>
             <v6LangP>1</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
@@ -413,6 +413,31 @@
               <FileName>Timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\F103_Library\Timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\F103_Library\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\F103_Library\gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>IWDG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\F103_Library\IWDG.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\F103_Library\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\F103_Library\Timer.c</FilePath>
             </File>
           </Files>
         </Group>
