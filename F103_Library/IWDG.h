@@ -15,5 +15,6 @@ void IWDG_SetPrescaler(uint8_t PrescalerValue);
 void IWDG_SetReloadValue(uint16_t ReloadValue);
 void IWDG_Start(void);
 void IWDG_Reset(void);
+void IWDG_Init(uint8_t PrescalerValue, uint16_t ReloadValue);
 
 #endif	//__IWDG_H
