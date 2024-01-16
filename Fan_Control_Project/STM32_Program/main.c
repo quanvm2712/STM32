@@ -5,27 +5,37 @@
 #include "MAX7219.h"
 #include "Timer.h"
 #include "math.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "i2c_drive.h"
+#include "gp_drive.h"
 
 
 #define ENCODER_PPR 30
 
-#define Kp	0.1
-
-
-int counterVal = 0;
+int counterVal;
 uint16_t position = 0;
 uint16_t old_position = 0;
 uint16_t encoderPPS = 0;
 uint16_t currentFanRPM = 0;
 uint16_t ms_count = 0;
-int16_t duty_cycle = 100;
-float current_error;
-float control_signal;
+uint8_t rx_data = 60;
 
+uint8_t temperature_data = 25;
+
+float control_signal;
+uint8_t* fanRPMData;
+char rpm_buffer[9]; // Adjust the size based on your integer size
 
 float a = -0.52;
 float b = 197.43;
 float c = -7992;
+
+/*AHT20 variables*/
+uint8_t data[6];
+float actualTemperature;
+float actualHumidity;
+uint8_t AHT20_Data[2];
 
 
 void TIM1_UP_IRQHandler(){
@@ -44,7 +54,7 @@ void TIM1_UP_IRQHandler(){
 	}
 }
 
-
+ 
 void TIM1_Config(){
 	TIM_EnableTimerClock(TIM1);
 	
@@ -66,31 +76,76 @@ void led_blink(){
 	delay_ms(100);
 }
 
-void Set_InputFilter(){
-	TIM3->CCMR1 |= (0b1010 << 4);
-	TIM3->CCMR1 |= (0b1010 << 12);
+
+void Set_DutyCycle(uint8_t DutyCycle){
+	TIM_SetCCRxReg(TIM3,DutyCycle, TIM_Channel_3);
 }
 
-void Set_FanSpeed(uint16_t DesiredFanRPM){
-	control_signal = (b*(-1) + sqrt(pow(b,2) - 4*a*(c - DesiredFanRPM))) / (2*a);
+void AHT20_Init(){
+	//DelayMs(40);
+	delay_ms(40);
+	//Send Init command to AHT20
 	
-	if(control_signal > 100.0) control_signal = 100.0;
-	else if(control_signal < 0.0) control_signal = 0.0;
 	
-	TIM_SetCCRxReg(TIM3,control_signal, TIM_Channel_3);
+	uint8_t status;
+	I2C_read1(0x38, &status, 1);
+	
+	if (!(status & (1 << 3)))
+	{
+		uint8_t init_command[] = {0xBE, 0x08, 0x00};
+		I2C_write(0x38, init_command, 3);
+		delay_ms(10);
+	}
+
+}
+
+void AHT20_GetData(uint8_t *sensor_data){
+	//Send trigger measurement command
+
+	uint8_t trigger_command[] = {0xAC, 0x38, 0x00};
+	I2C_write(0x38, trigger_command, 3);
+	//
+	delay_ms(80);
+
+	
+	//Wait for measurement to be completed
+	uint8_t status;
+	do 
+	{
+		I2C_read1(0x38, &status, 1);
+	}while(status & (1 << 7));
+
+	//get data
+	I2C_read(0x38,sensor_data, 6);
+}
+
+
+void AHT20_GetValue(uint8_t* value){
+	AHT20_GetData(data);
+	uint32_t humidity = ((data[1] << 16) | (data[2] << 8) | data[3]) >> 4;
+	uint32_t temperature = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5];
+	
+	actualTemperature = (temperature * 200.0 / 1048576.0) - 50.0;
+	actualHumidity = (humidity * 100.0 / 1048576.0);
+
+	value[0] = (uint8_t) actualTemperature;
+	value [1] = (uint8_t) actualHumidity;
+}
+
+uint16_t GetCounterValue(){
+	return TIM4->CNT;
 }
 
 int main(void){
 	SystemInit();
-	TIM2_Config();
 	TIM1_Config(); //Init timer 1 to generate interrupt every 1ms
 	
-	//Init SPI and MAX7219 sensor
+	//Init SPI and MAX7219
 	SPI_Init(SPI1, SPI_Master);
 	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
 
 	
-	//Init Timer 3 channel 1 IO for PWM functionality
+	//Init Timer 3 channel 3 IO for PWM functionality
 	GPIO_Init(GPIO_B, 0, AFIO_OUTPUT);	
 	//PWM Init and run
 	TIM_PWM_Init(TIM3, TIM_Channel_3, 72, 100, 50);
@@ -100,11 +155,15 @@ int main(void){
 	TIM_Encoder_Init(TIM4, SLAVE_EncoderMode_3);
 	TIM_EncoderStart(TIM4);
 	
+	//Init I2C and AHT20
+	I2C_init(I2C1_REMAP_ENABLE);
+	AHT20_Init();
+	
 	while(1){	
-		counterVal = TIM4->CNT; //Get current counter value from timer 3
-		Set_FanSpeed(5000);		
+		counterVal = TIM4->CNT; //Get current counter value from timer 3	
+		//Set_DutyCycle(rx_data);
 		
-		//MAX7219_PrintInt(currentFanRPM, 4, DIGIT_POSITION_3);
+		//AHT20_GetValue(AHT20_Data);
 		delay_ms(100);
 	}
 	return 0;

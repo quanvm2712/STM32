@@ -53,7 +53,6 @@ float a = -0.52;
 float b = 197.43;
 float c = -7992;
 
-
 /*AHT20 variables*/
 uint8_t data[6];
 float actualTemperature;
