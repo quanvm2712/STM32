@@ -19,7 +19,7 @@ uint16_t old_position = 0;
 uint16_t encoderPPS = 0;
 uint16_t currentFanRPM = 0;
 uint16_t ms_count = 0;
-uint8_t rx_data = 60;
+uint8_t rx_data = 55;
 
 uint8_t temperature_data = 25;
 
@@ -161,10 +161,10 @@ int main(void){
 	
 	while(1){	
 		counterVal = TIM4->CNT; //Get current counter value from timer 3	
-		//Set_DutyCycle(rx_data);
+		Set_DutyCycle(rx_data);
 		
-		//AHT20_GetValue(AHT20_Data);
-		delay_ms(100);
+		AHT20_GetValue(AHT20_Data);
+		delay_ms(10);
 	}
 	return 0;
 }
