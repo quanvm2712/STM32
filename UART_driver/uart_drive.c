@@ -1,5 +1,5 @@
 #include "uart_drive.h"
-
+#include "systick_time.h"
 void UART_init(unsigned short usart, unsigned long baud_rate) 
 {
 	//USART 1 using clock speed 72Mhz, USART 2 and 3 using 36Mhz
@@ -28,9 +28,12 @@ void UART_init(unsigned short usart, unsigned long baud_rate)
 		USART1->CR1 |= (1 << 2);
 		//Enable USART
 		USART1->CR1 |= (1 << 13);
+		
 	}
 	else if (usart == 2)
 	{
+		
+		
 		RCC->APB1ENR |= (1 << 17); // enable USART2
 		
 		//Enable related PINs
@@ -45,9 +48,12 @@ void UART_init(unsigned short usart, unsigned long baud_rate)
 		USART2->CR1 |= (1 << 2);
 		//Enable USART
 		USART2->CR1 |= (1 << 13);
+		
+		
 	}
 	else if (usart == 3)
 	{
+		
 		RCC->APB1ENR |= (1 << 18);// enable USART3
 		
 		//Enable related PINs
@@ -62,34 +68,37 @@ void UART_init(unsigned short usart, unsigned long baud_rate)
 		USART3->CR1 |= (1 << 2);
 		//Enable USART
 		USART3->CR1 |= (1 << 13);
+		
+	
 	}
 	
 }
 
-unsigned long USART_BRR(unsigned short usart, unsigned long BR)
+unsigned long USART_BRR(unsigned short usart, unsigned long baud_rate)
 {
-	unsigned long div = 36000000UL;
+	
+	unsigned long div = 36000000UL; // clock frequency
 	unsigned long dec;
 	unsigned long final;
-	double frac = 36000000.00;
-	double frac2 = 1.00;
+	double frac = 36000000.00;// fractional part
+	double frac2 = 1.00; // round decimals
 	
 	if(usart == 1)
 	{
 	div = 72000000UL;
 	frac = 72000000.00;
 	}
-	div = div / (BR*16);
-	frac = 16*((frac / (BR*16))-div);
+	div = div / (baud_rate*16);
+	frac = 16*((frac / (baud_rate*16))-div);
 	dec = frac;
 	frac2 = 100*(frac-dec);
 	if(frac2>50)
 	{
-		dec ++;
+		dec++;
 		if(dec == 16)
 		{
 			dec = 0;
-			div ++;
+			div++;
 		}
 	}
 	
@@ -99,32 +108,77 @@ unsigned long USART_BRR(unsigned short usart, unsigned long BR)
 	return final;
 	
 }
-/*
-unsigned long USART_BRR(unsigned short usart, unsigned long BR) {
-	//Fractional baud rate generation
-	// Tx/Rx baud = fCK / (16 * USARTDIV) 
-	//USARTDIV = DIV_Mantissa + DIV_Fraction
-	//DIV_Mantissa[15:4], DIV_Fraction[3:0] and devine 16
-	
-  // Select clock frequency based on USART (usart) type
-	unsigned long div = (usart == 1) ? 72000000UL : 36000000UL;
-	
-    
-    // Calculate DIV_Mantissa
-    unsigned long div_mantissa = div / (BR * 16);
-    
-    // Calculate Fractional Part
-    unsigned long fractional_part = (div % (BR * 16)) * 16;
-    
-    // Calculate USARTDIV
-    unsigned long frac = fractional_part / 16;
-    
-    // Rounding the Fractional Part
-    frac += (fractional_part % 16 >= 8);  // Rounding
-    
-    // Combine DIV_Mantissa and Fractional Part to form USARTDIV
-    unsigned long final = (div_mantissa << 4) | frac;
-
-    return final;
+char UART_RX(unsigned short usart)
+{
+	char receivedData;
+	if (usart == 1)
+	{
+		while (!(USART1->SR & (1 << 5))); // wait RXNE set
+		receivedData = USART1->DR;
+	}
+	else if (usart == 2)
+	{
+		while (!(USART2->SR & (1 << 5))); // wait RXNE set
+		receivedData = USART2->DR;
+	}
+	else if (usart == 3)
+	{
+		while (!(USART3->SR & (1 << 5))); // wait RXNE set
+		receivedData = USART3->DR;
+	}
+	return receivedData;
 }
-*/
+void UART_TX(unsigned short usart, char transmitData)
+{
+	if (usart == 1)
+	{
+		while (!(USART1->SR & (1 << 7))); // wait TXE set
+		USART1->DR = transmitData;
+	}
+	else if (usart == 2)
+	{
+		while (!(USART2->SR & (1 << 7))); // wait TXE set
+		USART2->DR = transmitData;
+	}
+	else if (usart == 3)
+	{
+		while (!(USART3->SR & (1 << 7))); // wait TXE set
+		USART3->DR = transmitData;
+	}
+}
+void UART_SendString(unsigned short usart, char str[])
+{
+	int i = 0;
+	while (str[i] != '\0')
+	{
+		UART_TX(usart, str[i]);
+		i++;
+	}
+}
+
+
+void UART_ReceiveString(unsigned short usart, char *buffer, int bufferSize)
+{
+	int i = 0;
+	char received;
+	
+	//Read char until buffer is full or newline character is received
+	do
+	{
+		received = UART_RX(usart);
+		buffer[i] = received;
+		i++;
+	}while (received != '\n' && i < bufferSize - 1);
+	//set null is the last pos
+	buffer[i] = '\0';
+}
+
+
+
+
+
+
+
+
+
+

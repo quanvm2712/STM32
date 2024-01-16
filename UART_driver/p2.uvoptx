@@ -183,7 +183,7 @@
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>receivedData</ItemText>
+          <ItemText>receivedMessage</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
