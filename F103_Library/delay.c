@@ -4,7 +4,7 @@ void TIM2_Config(void){
 	//enable timer2 clock
 	RCC->APB1ENR |= (1 << 0);
 	
-	TIM2->ARR = 10000 - 1;  //auto-reload register
+	TIM2->ARR = 0xFFFF - 1;  //auto-reload register
 	TIM2->PSC = 72 - 1;  //prescaler
 	
 	
