@@ -25,11 +25,8 @@ uint8_t temperature_data = 25;
 
 float control_signal;
 uint8_t* fanRPMData;
-char rpm_buffer[9]; // Adjust the size based on your integer size
+char rpm_buffer[9]; 
 
-float a = -0.52;
-float b = 197.43;
-float c = -7992;
 
 /*AHT20 variables*/
 uint8_t data[6];
@@ -82,11 +79,9 @@ void Set_DutyCycle(uint8_t DutyCycle){
 }
 
 void AHT20_Init(){
-	//DelayMs(40);
 	delay_ms(40);
+	
 	//Send Init command to AHT20
-	
-	
 	uint8_t status;
 	I2C_read1(0x38, &status, 1);
 	
@@ -101,10 +96,8 @@ void AHT20_Init(){
 
 void AHT20_GetData(uint8_t *sensor_data){
 	//Send trigger measurement command
-
 	uint8_t trigger_command[] = {0xAC, 0x38, 0x00};
 	I2C_write(0x38, trigger_command, 3);
-	//
 	delay_ms(80);
 
 	
@@ -160,10 +153,11 @@ int main(void){
 	AHT20_Init();
 	
 	while(1){	
-		counterVal = TIM4->CNT; //Get current counter value from timer 3	
+		counterVal = GetCounterValue(); //Get current counter value from timer 3	
 		Set_DutyCycle(rx_data);
 		
 		AHT20_GetValue(AHT20_Data);
+		
 		delay_ms(10);
 	}
 	return 0;
