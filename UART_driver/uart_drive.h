@@ -1,9 +1,8 @@
 #include "stm32f10x.h"  
 #include "gp_drive.h" 
 
-unsigned long USART_BRR(unsigned short usart, unsigned long baud_rate);
-void UART_init(unsigned short usart, unsigned long baud_rate);
-char UART_RX(unsigned short usart);
-void UART_TX(unsigned short usart, char transmitData);
-void UART_SendString(unsigned short usart, char str[]);
-void UART_ReceiveString(unsigned short usart, char *buffer, int bufferSize);
+void UART_init();
+void USART2_ReceiveString(char *buffer, int maxLength);
+char USART2_ReceiveChar(void);
+void USART2_SendChar(char ch);
+void UART_SendString(char str[]);
