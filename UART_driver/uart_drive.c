@@ -57,23 +57,34 @@ void UART_SendString(char str[])
 	}
 }
 
-void USART2_ReceiveString(char* buffer, int maxLength) {
+void USART2_ReceiveString(char* buffer, int length) {
     int count = 0;
-
-    while (count < maxLength - 1) {
-        
-        char receivedChar = USART2_ReceiveChar();
+		char receivedChar;
+	
+		str_empty(buffer);
+    while (count < length - 1) {
+					//duong
+         receivedChar = USART2_ReceiveChar();
 				// Check for null termination
-        if (receivedChar == '\0') {
+        if (receivedChar == '\0' || receivedChar == '\n' || receivedChar == '\r') {
             break;
         }else 
 				{
 					buffer[count++] = receivedChar;
 				}
-
     }
 
     // Null-terminate the string
     buffer[count] = '\0';
 }
 
+void str_empty(char str[])
+{
+	int i = 0;
+	while(str[i] != '\0')
+	{
+		str[i] = '\0';
+		i++;
+	}
+	
+}
