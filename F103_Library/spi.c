@@ -119,33 +119,12 @@ void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
 	temp = SPI1->SR;		
 }
 
-
-void DMA_Init(uint8_t* memoryAddress){
-	DMA_EnableClock(DMA1);
-	
-	DMA_SetPeripheralAddress(DMA1_Channel3, (uint32_t) 0x40013000 + 0x0C);
-	DMA_SetMemoryAddress(DMA1_Channel3, (uint32_t) memoryAddress);
-	DMA_SetNumberOfData(DMA1_Channel3, 2);
-	DMA_SetChannelPriority(DMA1_Channel3, DMA_PRIORITY_HIGH);
-	DMA_SetDirection(DMA1_Channel3, DMA_ReadFromMemory);
-	
-	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_MEMORY, DMA_INCREMENTED_ENABLE);
-	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_PERIPHERAL, DMA_INCREMENTED_DISABLE);
-	
-	DMA_SetMemorySize(DMA1_Channel3, DMA_8_BITS);
-	DMA_SetPeripheralSize(DMA1_Channel3, DMA_8_BITS);
-	
-	DMA_SetCircularMode(DMA1_Channel3, DMA_CIRCULARMODE_ENABLE);
-	DMA_Enable(DMA1_Channel3);
-}
-
 void SPI_Transmit_DMA(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
-	DMA_Init(data);
-	
+	DMA_SetTransactionInfo(DMA1_Channel3, (uint32_t)data, (uint32_t)&SPIx->DR, dataSize);
+
 	SPIx->CR2 |= (1 << 1);  //Enable TX buffer DMA (Send request to DMA channel)
 	while(!(DMA1->ISR & (1 << 9))); //Wait for Transfer complete flag to set
 	SPI_Enable(SPIx);
-	
 	
 	SPIx->CR2 &= ~(1 << 1); //Release request
 	SPI_Disable(SPIx);

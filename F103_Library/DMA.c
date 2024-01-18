@@ -10,11 +10,11 @@ void DMA_EnableClock(DMA_TypeDef* DMA_Instance){
 }
 
 void DMA_SetPeripheralAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t PeripheralAddress){
-	DMA_Channel->CPAR = (uint32_t) PeripheralAddress;
+	DMA_Channel->CPAR = PeripheralAddress;
 }
 
 void DMA_SetMemoryAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t MemoryAddress){
-	DMA_Channel->CMAR = (uint32_t) MemoryAddress;	
+	DMA_Channel->CMAR = MemoryAddress;	
 }
 
 void DMA_SetNumberOfData(DMA_Channel_TypeDef* DMA_Channel, uint16_t NumberOfData){
@@ -60,6 +60,28 @@ void DMA_SetPeripheralSize(DMA_Channel_TypeDef* DMA_Channel, uint8_t PeripheralS
 	DMA_Channel->CCR |= (PeripheralSize << 8);
 }
 
+void DMA_Init(DMA_TypeDef* DMAx, DMA_Channel_TypeDef* DMA_Channel, uint8_t Direction, uint8_t Priority, _Bool CircularMode){
+	DMA_EnableClock(DMAx);
+	
+	DMA_SetChannelPriority(DMA1_Channel3, Priority);
+	DMA_SetDirection(DMA1_Channel3, Direction);
+	
+	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_MEMORY, DMA_INCREMENTED_ENABLE);
+	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_PERIPHERAL, DMA_INCREMENTED_DISABLE);
+
+	DMA_SetCircularMode(DMA1_Channel3, CircularMode);		
+}
+
+
+void DMA_SetTransactionInfo(DMA_Channel_TypeDef* DMA_Channel, uint32_t memoryAddress, uint32_t peripheralAddress, uint16_t size){
+	DMA_SetMemoryAddress(DMA_Channel, memoryAddress);
+	DMA_SetPeripheralAddress(DMA_Channel, peripheralAddress);
+	DMA_SetNumberOfData(DMA_Channel, size);
+
+	DMA_Enable(DMA_Channel);	
+}
+
 void DMA_Enable(DMA_Channel_TypeDef* DMA_Channel){
 	DMA_Channel->CCR |= (1 << 0);
 }
+

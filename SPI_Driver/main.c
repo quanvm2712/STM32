@@ -6,9 +6,8 @@
 #include "DMA.h"
 
 
-uint8_t data[2] = "12";
+uint8_t data[] = "1234";
 uint8_t* dataAddr;
-
 
 
 int main(void){
@@ -16,6 +15,8 @@ int main(void){
 	
 	SPI_Init(SPI1, SPI_Master);
 	SPI_SetClockPolarity(SPI1, SPI_Polarity_HIGH);
+	
+	DMA_Init(DMA1, DMA1_Channel3, DMA_MemoryToPeripheral, DMA_PRIORITY_VERYHIGH, DMA_CIRCULARMODE_ENABLE);
 	
 	//MAX7219_Clean();
 	MAX7219_Init(10, DIGIT_0_TO_7, DECODE_MODE_DISABLE);
@@ -28,12 +29,12 @@ int main(void){
 		//delay_ms(1000);
 		//MAX7219_PrintInt(2001, 4, DIGIT_POSITION_5);
 		//delay_ms(1000);
-		dataAddr = data;
+
 		CS_Set();
-		SPI_Transmit_DMA(SPI1, data, 2);
+		SPI_Transmit_DMA(SPI1, data, 4);
 		CS_Reset();
 		
-		delay_ms(100);
+		delay_ms(10);
 	}
 }
 

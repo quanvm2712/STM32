@@ -10,8 +10,8 @@
 #define DMA_PRIORITY_VERYHIGH			3
 
 /*DMA Direction*/
-#define DMA_ReadFromPeripheral		0
-#define DMA_ReadFromMemory				1
+#define DMA_PeripheralToMemory		0
+#define DMA_MemoryToPeripheral		1
 
 /*DMA circular mode*/
 #define DMA_CIRCULARMODE_DISABLE	0
@@ -42,6 +42,9 @@ void DMA_SetIncrementedMode(DMA_Channel_TypeDef* DMA_Channel, _Bool source, _Boo
 void DMA_SetMemorySize(DMA_Channel_TypeDef* DMA_Channel, uint8_t MemSize);
 void DMA_SetPeripheralSize(DMA_Channel_TypeDef* DMA_Channel, uint8_t PeripheralSize);
 void DMA_Enable(DMA_Channel_TypeDef* DMA_Channel);
+
+void DMA_Init(DMA_TypeDef* DMAx, DMA_Channel_TypeDef* DMA_Channel, uint8_t Direction, uint8_t Priority, _Bool CircularMode);
+void DMA_SetTransactionInfo(DMA_Channel_TypeDef* DMA_Channel, uint32_t memoryAddress, uint32_t peripheralAddress, uint16_t size);
 
 
 #endif	//_DMA_H
