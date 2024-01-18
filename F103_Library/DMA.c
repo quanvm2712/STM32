@@ -1,10 +1,19 @@
 #include "DMA.h"
 
-void DMA_SetPeripheralAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t* PeripheralAddress){
+void DMA_EnableClock(DMA_TypeDef* DMA_Instance){
+	if(DMA_Instance == DMA1){
+		RCC->AHBENR |= (1 << 0);
+	}
+	else{
+		RCC->AHBENR |= (1 << 1);
+	}
+}
+
+void DMA_SetPeripheralAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t PeripheralAddress){
 	DMA_Channel->CPAR = (uint32_t) PeripheralAddress;
 }
 
-void DMA_SetMemoryAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t* MemoryAddress){
+void DMA_SetMemoryAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t MemoryAddress){
 	DMA_Channel->CMAR = (uint32_t) MemoryAddress;	
 }
 
@@ -49,4 +58,8 @@ void DMA_SetMemorySize(DMA_Channel_TypeDef* DMA_Channel, uint8_t MemSize){
 void DMA_SetPeripheralSize(DMA_Channel_TypeDef* DMA_Channel, uint8_t PeripheralSize){
 	DMA_Channel->CCR &= ~(0b11 << 8);  //Reset bits
 	DMA_Channel->CCR |= (PeripheralSize << 8);
+}
+
+void DMA_Enable(DMA_Channel_TypeDef* DMA_Channel){
+	DMA_Channel->CCR |= (1 << 0);
 }

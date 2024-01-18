@@ -36,5 +36,7 @@ void SPI_SoftwareSlaveSelect_Enable(SPI_TypeDef* SPIx);
 void SPI_SetFrameFormat(SPI_TypeDef* SPIx, uint8_t Format);
 
 void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize);
+void SPI_Transmit_DMA(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize);
+	
 #define	SPI	((SPI1_Typedef*)SPI_BASE_1)
 #endif	//__SPI_H

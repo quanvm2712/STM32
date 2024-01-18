@@ -40,6 +40,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
+DMA_HandleTypeDef hdma_spi1_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -48,6 +49,7 @@ SPI_HandleTypeDef hspi1;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -57,6 +59,9 @@ static void MX_SPI1_Init(void);
 /* USER CODE BEGIN 0 */
 #define CS_PIN_Set()		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 #define CS_PIN_Reset()	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+
+uint8_t data = 0xEF;
+uint8_t* dataPos;
 
 void toggle_led(){
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
@@ -108,6 +113,7 @@ void max7219_SetScanLimit(){
   * @retval int
   */
 int main(void)
+
 {
   /* USER CODE BEGIN 1 */
 
@@ -131,6 +137,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	CS_PIN_Reset();
@@ -143,8 +150,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	//max7219_TurnOn();
-	max7219_Clean();
-	uint8_t data = 0xEF;
+	//max7219_Clean();
+	
 	
 	//CS_PIN_Set();
 	//HAL_StatusTypeDef fd1 = HAL_SPI_Transmit(&hspi1, &data, 1, HAL_MAX_DELAY);
@@ -158,8 +165,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		//max7219_TurnOn();
-	
+		dataPos = &data;
+		CS_PIN_Set();
+		HAL_SPI_Transmit_DMA(&hspi1, &data, 1);
+		CS_PIN_Reset();
+		HAL_Delay(100);
+
   }
   /* USER CODE END 3 */
 }
@@ -238,6 +249,22 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
 
 }
 

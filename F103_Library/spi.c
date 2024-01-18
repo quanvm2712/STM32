@@ -1,4 +1,5 @@
 #include "spi.h"
+#include "DMA.h"
 
 void SPI_EnableClock(SPI_TypeDef* SPIx){
 	if (SPIx == SPI1)	{
@@ -38,6 +39,13 @@ void SPI_Enable(SPI_TypeDef* SPIx){
 	SPIx->CR1 |= (1 << 6);
 }
 
+void SPI_Disable(SPI_TypeDef* SPIx){
+	while(!(SPIx->SR & (1 << 1))); //Wait for TXE to set
+	while(SPIx->SR & (1 << 7)); //Wait until communication to be completed
+	
+	SPIx->CR1 &= ~(1 << 6);
+}
+
 void SPI_SoftwareSlaveSelect_Enable(SPI_TypeDef* SPIx){
 	SPIx->CR1 &= ~(0b1 << 9);
 	SPIx->CR1 |= (1 << 9); 
@@ -65,7 +73,6 @@ void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode){
 	SPI_SetFrameFormat(SPIx, SPI_MSBFirst);
 	
 	SPI_IO_Init(SPIx);
-	
 }
 
 void SPI_SetTransmitOnlyMode(void){
@@ -81,7 +88,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 		
 		//Init SPI1 IO
 		GPIO_Init(GPIO_A, 5, AFIO_OUTPUT);  //CLK
-		//GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);  
+		GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);  
 		GPIO_Init(GPIO_A, 7, AFIO_OUTPUT);	//MOSI	
 	}
 	else if(SPIx==SPI2){
@@ -112,6 +119,35 @@ void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
 	temp = SPI1->SR;		
 }
 
+
+void DMA_Init(uint8_t* memoryAddress){
+	DMA_EnableClock(DMA1);
+	
+	DMA_SetPeripheralAddress(DMA1_Channel3, (uint32_t) 0x40013000 + 0x0C);
+	DMA_SetMemoryAddress(DMA1_Channel3, (uint32_t) memoryAddress);
+	DMA_SetNumberOfData(DMA1_Channel3, 2);
+	DMA_SetChannelPriority(DMA1_Channel3, DMA_PRIORITY_HIGH);
+	DMA_SetDirection(DMA1_Channel3, DMA_ReadFromMemory);
+	
+	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_MEMORY, DMA_INCREMENTED_ENABLE);
+	DMA_SetIncrementedMode(DMA1_Channel3, DMA_SOURCE_PERIPHERAL, DMA_INCREMENTED_DISABLE);
+	
+	DMA_SetMemorySize(DMA1_Channel3, DMA_8_BITS);
+	DMA_SetPeripheralSize(DMA1_Channel3, DMA_8_BITS);
+	
+	DMA_SetCircularMode(DMA1_Channel3, DMA_CIRCULARMODE_ENABLE);
+	DMA_Enable(DMA1_Channel3);
+}
+
 void SPI_Transmit_DMA(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
+	DMA_Init(data);
+	
+	SPIx->CR2 |= (1 << 1);  //Enable TX buffer DMA (Send request to DMA channel)
+	while(!(DMA1->ISR & (1 << 9))); //Wait for Transfer complete flag to set
+	SPI_Enable(SPIx);
+	
+	
+	SPIx->CR2 &= ~(1 << 1); //Release request
+	SPI_Disable(SPIx);
 	
 }

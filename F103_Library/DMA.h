@@ -30,9 +30,10 @@
 #define	DMA_16_BITS								1
 #define	DMA_32_BITS								2
 
+void DMA_EnableClock(DMA_TypeDef* DMA_Instance);
 
-void DMA_SetPeripheralAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t* PeripheralAddress);
-void DMA_SetMemoryAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t* MemoryAddress);
+void DMA_SetPeripheralAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t PeripheralAddress);
+void DMA_SetMemoryAddress(DMA_Channel_TypeDef* DMA_Channel, uint32_t MemoryAddress);
 void DMA_SetNumberOfData(DMA_Channel_TypeDef* DMA_Channel, uint16_t NumberOfData);
 void DMA_SetChannelPriority(DMA_Channel_TypeDef* DMA_Channel, uint8_t Priority);
 void DMA_SetDirection(DMA_Channel_TypeDef* DMA_Channel, uint8_t Direction);
@@ -40,7 +41,7 @@ void DMA_SetCircularMode(DMA_Channel_TypeDef* DMA_Channel, _Bool isEnabled);
 void DMA_SetIncrementedMode(DMA_Channel_TypeDef* DMA_Channel, _Bool source, _Bool isEnabled);
 void DMA_SetMemorySize(DMA_Channel_TypeDef* DMA_Channel, uint8_t MemSize);
 void DMA_SetPeripheralSize(DMA_Channel_TypeDef* DMA_Channel, uint8_t PeripheralSize);
-
+void DMA_Enable(DMA_Channel_TypeDef* DMA_Channel);
 
 
 #endif	//_DMA_H

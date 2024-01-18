@@ -10,4 +10,4 @@
   C:\Users\quanv\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include\system_stm32f10x.h \
   ..\F103_Library\delay.h ..\F103_Library\gpio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h ..\F103_Library\spi.h \
-  ..\Hardware_Library\MAX7219.h
+  ..\Hardware_Library\MAX7219.h ..\F103_Library\DMA.h
