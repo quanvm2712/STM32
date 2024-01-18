@@ -1,4 +1,5 @@
 #include "spi.h"
+#include "DMA.h"
 
 void SPI_EnableClock(SPI_TypeDef* SPIx){
 	if (SPIx == SPI1)	{
@@ -38,6 +39,13 @@ void SPI_Enable(SPI_TypeDef* SPIx){
 	SPIx->CR1 |= (1 << 6);
 }
 
+void SPI_Disable(SPI_TypeDef* SPIx){
+	while(!(SPIx->SR & (1 << 1))); //Wait for TXE to set
+	while(SPIx->SR & (1 << 7)); //Wait until communication to be completed
+	
+	SPIx->CR1 &= ~(1 << 6);
+}
+
 void SPI_SoftwareSlaveSelect_Enable(SPI_TypeDef* SPIx){
 	SPIx->CR1 &= ~(0b1 << 9);
 	SPIx->CR1 |= (1 << 9); 
@@ -65,8 +73,6 @@ void SPI_Init(SPI_TypeDef* SPIx, uint8_t SPI_Mode){
 	SPI_SetFrameFormat(SPIx, SPI_MSBFirst);
 	
 	SPI_IO_Init(SPIx);
-	SPI_Enable(SPIx);
-	
 }
 
 void SPI_SetTransmitOnlyMode(void){
@@ -82,7 +88,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 		
 		//Init SPI1 IO
 		GPIO_Init(GPIO_A, 5, AFIO_OUTPUT);  //CLK
-		//GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);  
+		GPIO_Init(GPIO_A, 6, AFIO_OUTPUT);  
 		GPIO_Init(GPIO_A, 7, AFIO_OUTPUT);	//MOSI	
 	}
 	else if(SPIx==SPI2){
@@ -97,6 +103,7 @@ void SPI_IO_Init(SPI_TypeDef* SPIx){
 }
 
 void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
+	SPI_Enable(SPIx);
 	uint8_t count = 0;
 	while (count < dataSize){
 		while(!((SPIx->SR) & (1 << 1)));  //Wait until TX buffer is empty
@@ -110,4 +117,16 @@ void SPI_Transmit(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
 	//  Clear the Overrun flag by reading DR and SR
 	uint8_t temp = SPI1->DR;
 	temp = SPI1->SR;		
+}
+
+void SPI_Transmit_DMA(SPI_TypeDef* SPIx, uint8_t* data, uint8_t dataSize){
+	DMA_SetTransactionInfo(DMA1_Channel3, (uint32_t)data, (uint32_t)&SPIx->DR, dataSize);
+
+	SPIx->CR2 |= (1 << 1);  //Enable TX buffer DMA (Send request to DMA channel)
+	while(!(DMA1->ISR & (1 << 9))); //Wait for Transfer complete flag to set
+	SPI_Enable(SPIx);
+	
+	SPIx->CR2 &= ~(1 << 1); //Release request
+	SPI_Disable(SPIx);
+	
 }
